@@ -6,6 +6,7 @@ import json
 import numpy as np
 from RsSmw import *
 import time
+import RIS_usb
 
 try:
     with open ("config.json") as config_f:
@@ -58,7 +59,7 @@ def prepare_freq() -> list:
 def pattern_loop(freq : int, azimuth_angle : str, elevation_angle : str):
     for pattern in patterns_data:
         analyzer.meas_prep(freq, span, analyzer_mode, revlevel, rbw)
-        #RIS_usb.set_pattern(pattern["HEX"]) # comment for refernce measure
+        RIS_usb.set_pattern(pattern["HEX"]) # comment for refernce measure
         with open(trace_file, 'a+') as file:
             file.write(azimuth_angle+";"+elevation_angle+";"+pattern["ID"]+";")  # Write information about pattern and angle
             file.close()  # Close the file
