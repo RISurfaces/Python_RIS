@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
-    df = pd.read_csv(file, sep=';', header=None, names=['vertical', 'horizontal', 'pattern', 'freq', 'power'])
+    df = pd.read_csv(file, sep=';', header=None, names=['horizontal', 'vertical', 'pattern', 'freq', 'power'])
     for pattern in patterns:
         df_pattern = df[(df['pattern'] == pattern) & (df['horizontal'] >= horizontal_range[0]) & (df['horizontal'] <= horizontal_range[1])]
         heatmap_data = df_pattern.pivot_table(index='vertical', columns='horizontal', values='power')
@@ -30,6 +30,6 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
 
 
 
-file_path=r'wyniki/charakterystyka_3D/24_04_ch_ka_3D_5_5Ghz_1_5m_jest_zero.csv'
-patterns=[1]
+file_path=r'3D_vertical_04.06.csv'
+patterns=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
 plot_multiple_patterns_from_csv(file_path, patterns)
