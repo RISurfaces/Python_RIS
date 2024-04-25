@@ -27,20 +27,20 @@ def plot_multiple_patterns_from_csv(file_path, patterns):
         marker = markers[index % len(markers)]
         plt.plot(specific_pattern_df['Degrees'], specific_pattern_df['Power'], marker=marker, linestyle='-', label=pattern, color=color)
 
-    plt.xlabel('Kąt azymutu [°]', fontsize=18)
-    plt.ylabel('Moc odebrana [dBm]', fontsize=18)
-    plt.title('Moc odebrana w fukcji kąta azymutu RMA', fontsize=18)
+    plt.xlabel('Kąt azymutu [°]', fontsize=22)
+    plt.ylabel('Moc odebrana [dBm]', fontsize=22)
+    plt.title('Moc odebrana w fukcji kąta azymutu RMA', fontsize=24)
     plt.xlim(45, 135)
     plt.ylim(power_min, power_max)
-    plt.xticks([x *5 for x in range(9, 27)], rotation=45, fontsize=14)  
-    plt.yticks([y * 2 for y in range(int(power_min / 2), int(power_max / 2 + 1))], fontsize=14)  
-    plt.legend(["1", "2","3","4","5","6"], loc="upper right", prop={'size': 15}, borderaxespad=2, title='Wzorzec')
+    plt.xticks([x *5 for x in range(9, 27)], rotation=45, fontsize=16)  
+    plt.yticks([y * 2 for y in range(int(power_min / 2), int(power_max / 2 + 1))], fontsize=16)  
+    plt.legend(["1", "2","3","4","5","6"], loc="upper right", prop={'size': 18}, borderaxespad=0.5, title_fontsize=18, title='Wzorzec')
     plt.grid(True)
     plt.savefig(f'2D_pattern.jpg', format='jpg')
     plt.show()
     
 
 # Adjusted for demonstration; replace with your actual file path and patterns
-file_path = open(r'C:\Users\Marcel\Python_RIS\Python_RIS\wyniki\charakterystyka_2D\9_04_5_5GHz_1.5m_ch_ka.csv')
+file_path = open(r'/Users/dawidbrzakala/Python_RIS/wyniki/charakterystyka_2D/9_04_5_5GHz_1.5m_ch_ka.csv')
 patterns = [1,2, 17, 19, 21, 26]#,"Horizontal strips [0101]","Chessboard [1010/0101]","Chessboard [0101/1010]","Thick vertical strips [1100]","Thick vertical strips [0011]","Thicker vertical strips [11110000]","Thicker vertical strips [00001111]","Thick horizontal strips [1100]","Thick horizontal strips [0011]","Chessboard [11001100/00110011]", "Chest","Dartboard","Random 1","Random 2","Random 3","Random 4"]
 plot_multiple_patterns_from_csv(file_path, patterns)#"All elements turn on","Only first element turn on","Only last element turn on","Left side on",
