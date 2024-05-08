@@ -1,13 +1,35 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageDraw
+import json
+
+def get_hex_pattern_by_id(pattern_id):
+    json_file = "RIS_patterns.json"  # Nazwa pliku JSON
+    with open(json_file, 'r') as f:
+        data = json.load(f)
+    
+    for pattern in data["PATTERNS"]:
+        if pattern["ID"] == pattern_id:
+            return pattern["HEX"]
+    
+    return None  # return None if pattern_id not found
+
+def get_id_pattern_by_hex(hex_pattern):
+    json_file = "RIS_patterns.json"  # Nazwa pliku JSON
+    with open(json_file, 'r') as f:
+        data = json.load(f)
+    
+    for pattern in data["PATTERNS"]:
+        if pattern["HEX"] == hex_pattern:
+            return pattern["ID"]
+    
+    return None  # return None if hex_pattern not found
 
 def hex_to_bin(hex_string):
     # Usuwamy prefix 0x
     hex_string = hex_string.replace("0x", "") 
     # Konwersja hex na binarną z usunięciem prefixu binarnego '0b' i dopełnieniem zerami
     bin_string = ''.join(format(int(c, 16),'04b') for c in hex_string)
-    print(bin_string)
     return bin_string
 
 # Funkcja rysująca GUI na podstawie ciągu binarnego
@@ -29,20 +51,24 @@ def generate_image(binary_string):
     window.mainloop()
 
 def on_convert():
-    hex_string = entry.get()
-    bin_string = hex_to_bin(hex_string)
-    img = generate_image(bin_string)
-    try:
-        img.show()
-    except AttributeError:
-        print("EXIT")
+    pattern_id_or_hex = entry.get()
+    if pattern_id_or_hex.startswith("0x"): # If the input is HEX
+        bin_string = hex_to_bin(pattern_id_or_hex)
+        generate_image(bin_string)
+    else: # If the input is ID
+        hex_pattern = get_hex_pattern_by_id(pattern_id_or_hex)
+        if hex_pattern:
+            bin_string = hex_to_bin(hex_pattern)
+            generate_image(bin_string)
+        else:
+            print("Pattern o podanym ID nie został znaleziony.")
 
 # Ustawienia GUI
 root = tk.Tk()
 root.title("Hex to Bin Image Converter")
 
 # Etykieta i pole wprowadzania
-label = ttk.Label(root, text="Podaj ciąg hex:")
+label = ttk.Label(root, text="Podaj ID patternu lub HEX:")
 label.pack()
 entry = ttk.Entry(root)
 entry.pack()
