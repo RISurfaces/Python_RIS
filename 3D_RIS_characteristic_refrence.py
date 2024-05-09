@@ -1,6 +1,5 @@
 import analyzer
 import generator
-import RIS_usb
 import remote_head
 import json
 import numpy as np
@@ -58,7 +57,6 @@ def prepare_freq() -> list:
 def pattern_loop(freq : int, azimuth_angle : str, elevation_angle : str):
     for pattern in patterns_data:
         analyzer.meas_prep(freq, span, analyzer_mode, revlevel, rbw)
-        #RIS_usb.set_pattern(pattern["HEX"]) # comment for refernce measure
         with open(trace_file, 'a+') as file:
             file.write(azimuth_angle+";"+elevation_angle+";"+pattern["ID"]+";")  # Write information about pattern and angle
             file.close()  # Close the file
@@ -96,8 +94,6 @@ if __name__=="__main__":
         analyzer.com_prep()
         analyzer.com_check()
         generator.com_check()
-        RIS_usb.reset_RIS()
-        #remote_head.az360()
         remote_head.resolution(step_resolution)
         remote_head.rotate_down(elevation_start_position)
         elevation_steps_from_start = -elevation_start_position
