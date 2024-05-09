@@ -39,15 +39,22 @@ def generate_image(binary_string):
 
     grid_size = 16
     cell_size = 30
+    outer_margin = 10
+    inner_margin = 4
     
+    outer_frame = tk.Frame(window, bg="white", padx=outer_margin, pady=outer_margin)  # Zewnętrzna ramka z czarnym tłem i marginesami
+    outer_frame.pack()
+
+    inner_frame = tk.Frame(outer_frame, bg="black", padx=inner_margin, pady=inner_margin)  # Wewnętrzna ramka
+    inner_frame.pack()
+
     for i in range(256):
         row = i // grid_size
         col = i % grid_size
-        color = "green" if binary_string[i] == '1' else "white"
-        canvas = tk.Canvas(window, width=cell_size*2, height=cell_size , highlightthickness=0)
-        canvas.create_rectangle(1, 1, cell_size*2, cell_size, fill=color, outline=color)
-        canvas.grid(row=row, column=col, padx=(0.1), pady=(0.1))
-        
+        color = "green" if binary_string[i] == '1' else "#C0F6C7"
+        cell = tk.Frame(inner_frame, width=cell_size*2, height=cell_size, bg=color, highlightbackground="black", highlightthickness=1)
+        cell.grid(row=row, column=col)
+    
     window.mainloop()
 
 def on_convert():
@@ -69,12 +76,12 @@ root.title("Hex to Bin Image Converter")
 
 # Etykieta i pole wprowadzania
 label = ttk.Label(root, text="Podaj ID patternu lub HEX:")
-label.pack()
+label.pack(pady=(10, 5))  # Zwiększone pady na górze i dołu
 entry = ttk.Entry(root)
-entry.pack()
+entry.pack(pady=(0, 5))  # Zwiększony pady na dole
 
 # Przycisk do konwersji
 convert_button = ttk.Button(root, text="Konwertuj i pokaż obraz", command=on_convert)
-convert_button.pack()
+convert_button.pack(pady=(0, 10))  # Zwiększony pady na dole
 
 root.mainloop()
