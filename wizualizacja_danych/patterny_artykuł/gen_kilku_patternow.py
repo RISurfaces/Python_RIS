@@ -25,12 +25,12 @@ def display_images(paths):
 
 # Przykładowe ścieżki do zdjęć
 image_paths = [
-    "pattern_12.png",
-    "pattern_12.png",
-    "pattern_14.png",
-    "pattern_12.png",
-    "pattern_14.png",
-    "pattern_12.png"
+    "1_pattern.png",
+    "2_pattern.png",
+    "15_pattern.png",
+    "19_pattern.png",
+    "21_pattern.png",
+    "26_pattern.png"
 ]
 
 # Wyświetlanie zdjęć
