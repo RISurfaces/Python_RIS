@@ -5,7 +5,7 @@ import json
 try:
     with open ("config.json") as config_f:
        config = json.load(config_f)
-       ris_port = config["RIS_PORT"]
+       ris_port = config["RIS_PORTS"][0]
        ris_set_time = config["RIS_SET_TIME"]
        try:
             ris = serial.Serial(ris_port, 115200)

@@ -19,7 +19,7 @@
     "ELEVATION_STEP" : 10,
     "ELEVATION_NO_ANGLES" : 6, 
     "RIS_PORT_COMMENT": "COM7 - Windows, /dev/tty.usbserial-D382L3CH - MacOS, linux-/dev/ttyUSB0",
-    "RIS_PORT" : "/dev/ttyUSB0", 
+    "RIS_PORTS" : ["COM7"],
     "SPAN" : 0,
     "ANALYZER_MODE" : "MAXHold",
     "REVLEVEL" : -30,
