@@ -1,4 +1,4 @@
-import RIS_usb
+import old_system.RIS_usb as RIS_usb
 import time
 RIS_usb.reset_RIS()
 pattern = "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"

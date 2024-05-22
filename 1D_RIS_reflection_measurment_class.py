@@ -39,21 +39,21 @@ except FileNotFoundError:
 
 def pattern_loop(freq, RIS_list : list):
     for pattern in patterns_data:
-        analyzer.meas_prep(freq, span, analyzer_mode, revlevel, rbw)
         for ris in RIS_list:
-             ris.set_pattern(pattern["HEX"])
-        with open(trace_file, 'a+') as file:
-            file.write(pattern["ID"]+";"+pattern["DESC"])  # Write information about pattern information
-            file.write(";")
-            file.close()  # CLose the file
-        time.sleep(0.1)
-        # RIS_usb.read_pattern() #Inofrmation about pattern set on RIS.
-        analyzer.trace_get()
+            analyzer.meas_prep(freq, span, analyzer_mode, revlevel, rbw)
+            ris.set_pattern(pattern["HEX"])
+            with open(trace_file, 'a+') as file:
+                file.write(str(ris.id)+";"+pattern["ID"]+";"+pattern["DESC"])  # Write information about pattern information
+                file.write(";")
+                file.close()  # CLose the file
+            time.sleep(0.1)
+            # RIS_usb.read_pattern() #Inofrmation about pattern set on RIS.
+            analyzer.trace_get()
 
-def freq_loop(freq_data):
+def freq_loop(freq_data : list, RIS_list : list):
      for freq in freq_data:
         generator.meas_prep(True, generator_mode, generator_amplitude, freq) # True means that generator is set up an generate something.
-        pattern_loop(freq)
+        pattern_loop(freq, RIS_list)
 
 def ris_usb_init() -> list:
     RIS_list = []
@@ -72,7 +72,7 @@ if __name__=="__main__":
         generator.com_check()
         RIS_list = ris_usb_init()
         freq_data = np.arange(start_freq, end_freq+step_freq, step_freq)
-        freq_loop(freq_data)
+        freq_loop(freq_data, RIS_list)
         analyzer.meas_close()
         generator.meas_close()
         exit()

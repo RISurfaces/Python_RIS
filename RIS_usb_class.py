@@ -12,45 +12,45 @@ except FileNotFoundError:
     exit()
 
 class RIS_usb():
-    def __init__(self, serial : str, id : int) -> None:
+    def __init__(self, port : str, id : int) -> None:
         try:
-             self.serial = serial.Serial(serial, 115200)
+             self.port = serial.Serial(port, 115200)
              self.id = id
         except serial.SerialException:
-           print("[SERIAL ERROR] Change serial number in config file. Check correct serial in device manager.")
+           print("[SERIAL ERROR] Change port number in config file. Check correct port in device manager.")
            exit()
            
            
     def reset(self):
-        self.serial.write(bytes('!Reset\n', 'utf-8'))
+        self.port.write(bytes('!Reset\n', 'utf-8'))
         time.sleep(ris_set_time)
-        while self.serial.in_waiting:
-            response = self.serial.readline().decode('utf-8').rstrip()
+        while self.port.in_waiting:
+            response = self.port.readline().decode('utf-8').rstrip()
             print(f"Response from resetting RIS: {response}")
             time.sleep(0.1)
                 
     def set_BT_key(self, key : str):
-        self.serial.write(bytes(f'!BT-Key={key}', 'utf-8'))
-        # Wait long enough or check self.serial.NumBytesAvailable for becoming non-zero
+        self.port.write(bytes(f'!BT-Key={key}', 'utf-8'))
+        # Wait long enough or check self.port.NumBytesAvailable for becoming non-zero
         time.sleep(2)
-        response = self.serial.readline().decode('utf-8').rstrip()
+        response = self.port.readline().decode('utf-8').rstrip()
         print(f"Response from setting a new Static Pass Key: {response}")
     
     def set_pattern(self, pattern : str):
-        self.serial.write(bytes(f"!{pattern}\n", 'utf-8'))
+        self.port.write(bytes(f"!{pattern}\n", 'utf-8'))
         time.sleep(ris_set_time)
         
     def read_EXT_voltage(self) -> float:
-        self.serial.write(bytes('?Vext\n', 'utf-8'))
-        externalVoltage = float(self.serial.readline().decode('utf-8').rstrip())
+        self.port.write(bytes('?Vext\n', 'utf-8'))
+        externalVoltage = float(self.port.readline().decode('utf-8').rstrip())
         print(f"External supply voltage: {externalVoltage}")
         return externalVoltage
 
     def read_pattern(self):
-        self.serial.write(bytes('?Pattern\n', 'utf-8'))
+        self.port.write(bytes('?Pattern\n', 'utf-8'))
         time.sleep(ris_set_time)
-        while self.serial.in_waiting:
-            response = self.serial.readline().decode('utf-8').rstrip()
+        while self.port.in_waiting:
+            response = self.port.readline().decode('utf-8').rstrip()
             print(f"Response from resetting RIS: {response}")
             time.sleep(ris_set_time)
             
