@@ -17,7 +17,7 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
         cbar.ax.yaxis.label.set_size(18) #Font size of colorbar label cbar_kws
 
         ax.invert_yaxis()
-        plt.title(f'Heatmapa dla wzorca 1', fontsize=22)
+        plt.title(f'Heatmapa dla wzorca {pattern}', fontsize=22)
         plt.xlabel('Kąty azymutu [°]', fontsize=18)
         plt.ylabel('Kąty elewacji [°]', fontsize=18)
         plt.xticks(fontsize=14)
@@ -30,6 +30,6 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
 
 
 
-file_path=r'3D_vertical_04.06.csv'
+file_path=r'C:\Users\Paweł\Desktop\Kliks\Ris\Python_RIS\wyniki_surowe_dane\charakterystyka_3D\char_pozioma_3D\06_06_ch_ka_3D_horizontal_5_5Ghz_2m.csv'
 patterns=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
 plot_multiple_patterns_from_csv(file_path, patterns)
