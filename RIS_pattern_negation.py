@@ -9,6 +9,6 @@ def ris_pattern_negation(ris_pattern : str) -> str:
         ris_pattern = ris_pattern[:2] + '0' + ris_pattern [2:]
     return ris_pattern
 
-ris_pattern = '0xFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00'
+ris_pattern = '0x0123456789ABCDEFFF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF00FF0F'
 ris_pattern_neg = ris_pattern_negation(ris_pattern)
 print(ris_pattern_neg)
