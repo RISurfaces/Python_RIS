@@ -19,6 +19,7 @@ try:
         rbw=config["RBW"]
         ris_ports = config["RIS_PORTS"]
         generator_amplitude=config["GENERATOR_AMPLITUDE"]
+        pattern_for_negation = config["ID_FOR_NEGATION"]
         # More modes will be add later.
         if config["GENERATOR_MODE"] == "CW":
             generator_mode = enums.FreqMode.CW
@@ -50,7 +51,7 @@ def ris_pattern_negation(ris_pattern : str) -> str:
 def pattern_loop(freq, RIS_list : list):
     for pattern in patterns_data:
         for ris in RIS_list:
-            if pattern["ID"] in []:
+            if pattern["ID"] in pattern_for_negation:
                 if ris.id == 0:
                     ris_pattern = pattern["HEX"]
                     ris.set_pattern(ris_pattern)
