@@ -1,6 +1,6 @@
 import analyzer
 import generator
-import RIS_usb
+from RIS_usb_class import RIS_usb
 import remote_head
 import json
 import numpy as np
@@ -17,7 +17,9 @@ try:
         azimuth_step=config["AZIMUTH_STEP"]
         azimuth_no_of_angles = config["AZIMUTH_NO_ANGLES"]
         step_resolution = config["STEP_RESOLUTION"]
+        pattern_for_negation = ["ID_FOR_NEGATION"]
         span=config["SPAN"]
+        ris_ports = config["RIS_PORTS"]
         analyzer_mode=config["ANALYZER_MODE"]
         revlevel=config["REVLEVEL"]
         rbw=config["RBW"]
@@ -51,43 +53,90 @@ def prepare_freq() -> list:
         freq_data = [start_freq]
     return freq_data
 
-def pattern_loop(freq : int, angle : str):
+def ris_pattern_negation(ris_pattern : str) -> str:
+    ris_pattern = int(ris_pattern,16)
+    ris_pattern = ~ris_pattern & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+    ris_pattern = hex(ris_pattern)
+    ris_pattern = str(ris_pattern)
+    no_of_zero_to_add = 66 - len(ris_pattern)
+    for i in range(no_of_zero_to_add):
+        ris_pattern = ris_pattern[:2] + '0' + ris_pattern [2:]
+    ris_pattern = ris_pattern.upper()
+    ris_pattern = ris_pattern.replace('X', 'x')
+    return ris_pattern
+
+def pattern_loop(freq, RIS_list : list):
     for pattern in patterns_data:
+        for ris in RIS_list:
+            # print("normalny")
+            # ris.set_pattern(pattern["HEX"])
+            # print(pattern["HEX"])
+            # time.sleep(3)
+            # print("zanegowany")
+            # negation = ris_pattern_negation(pattern["HEX"])
+            # print(negation)
+            # ris.set_pattern(negation)
+            # time.sleep(3)
+            if int(pattern["ID"]) in pattern_for_negation:
+                if ris.id == 0:
+                    ris_pattern = pattern["HEX"]
+                    ris.set_pattern(ris_pattern)
+                    print(ris.id, ris_pattern)
+                elif ris.id==1:
+                    ris_pattern = ris_pattern_negation(pattern["HEX"])
+                    ris.set_pattern(ris_pattern)
+                    print(ris.id, ris_pattern)
+                else:
+                    print("ERR")
+            else:
+                ris.set_pattern(pattern["HEX"])
         analyzer.meas_prep(freq, span, analyzer_mode, revlevel, rbw)
-        RIS_usb.set_pattern(pattern["HEX"])
         with open(trace_file, 'a+') as file:
-            file.write(angle+";"+pattern["ID"]+";")  # Write information about pattern and angle
-            file.close()  # Close the file
+            file.write(str(ris.id)+";"+pattern["ID"]+";"+pattern["DESC"])  # Write information about pattern information
+            file.write(";")
+            file.close()  # CLose the file
+            # RIS_usb.read_pattern() #Inofrmation about pattern set on RIS.
         time.sleep(0.1)
-        # RIS_usb.read_pattern() #Information about pattern set on RIS.
         analyzer.trace_get()
 
-def freq_loop(freq_data : list, angle : str):
+def freq_loop(freq_data : list, angle : str, RIS_list : list):
      for freq in freq_data:
         generator.meas_prep(True, generator_mode, generator_amplitude, freq) # True means that generator is set up an generate something.
-        pattern_loop(freq, angle)
+        pattern_loop(freq, angle, RIS_list)
         
-def angle_loop(freq_data : list, steps_from_start : int) -> bool:
+def angle_loop(freq_data : list, steps_from_start : int, RIS_list : list) -> bool:
     for i in range(azimuth_no_of_angles):
         print("Ilość kroków od startu: ", steps_from_start)
         angle = count_angle(steps_from_start)
         print("Aktualny kąt: ", angle)
-        freq_loop(freq_data, angle)
+        freq_loop(freq_data, angle, RIS_list)
         remote_head.obrot_prawo(azimuth_step) # move few steps to the right (descroption in config file)
         steps_from_start += azimuth_step
     return True
-       
 
+
+def ris_usb_init() -> list:
+    RIS_list = []
+    id = 0
+    for port in ris_ports:
+        RIS_list.append(RIS_usb(port, id))
+        id+=1
+    for ris in RIS_list:
+        ris.reset()
+        print(ris.port)
+        print(ris.id)
+    return RIS_list   
+   
+    
 if __name__=="__main__":
     try:
         analyzer.com_prep()
         analyzer.com_check()
         generator.com_check()
-        RIS_usb.reset_RIS()
-        #remote_head.az360()
+        RIS_list = ris_usb_init()
         freq_data = prepare_freq()
         steps_from_start = 0 # counts how many steps remote head did. Could be used to count actual measurement angle.
-        measure_ended = angle_loop(freq_data, steps_from_start)
+        measure_ended = angle_loop(freq_data, steps_from_start, RIS_list)
         analyzer.meas_close()
         generator.meas_close()
         exit()
