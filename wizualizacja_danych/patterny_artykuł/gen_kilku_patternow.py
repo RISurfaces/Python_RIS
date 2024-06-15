@@ -21,6 +21,7 @@ def display_images(paths):
     fig.legend(legend_handles, legend_texts, loc='lower center', ncol=2, fontsize='large', title='Legend')  # Dodanie legendy
     
     plt.subplots_adjust(wspace=0.05, hspace=0.3)  # Zmniejszenie odstępów między obrazami
+    plt.savefig(f'wizu_patternow_ENG', format='jpg', bbox_inches='tight')
     plt.show()
 
 # Przykładowe ścieżki do zdjęć
