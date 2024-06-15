@@ -61,7 +61,7 @@ def pattern_loop(freq : int, azimuth_angle : str, elevation_angle : str):
         analyzer.meas_prep(freq, span, analyzer_mode, revlevel, rbw)
         RIS_usb.set_pattern(pattern["HEX"]) # comment for refernce measure
         with open(trace_file, 'a+') as file:
-            file.write(azimuth_angle+";"+elevation_angle+";"+pattern["ID"]+";")  # Write information about pattern and angle
+            file.write(round(azimuth_angle,2)+";"+round(elevation_angle, 2)+";"+pattern["ID"]+";")  # Write information about pattern and angle
             file.close()  # Close the file
         time.sleep(0.1)
         analyzer.trace_get()
