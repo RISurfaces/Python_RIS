@@ -32,6 +32,6 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
 
 
 
-file_path=r'/Users/dawidbrzakala/Python_RIS/wyniki_surowe_dane/charakterystyka_3D/char_pionowa_3D/3D_vertical_04.06.csv'
+file_path=r'/Users/dawidbrzakala/Python_RIS/wyniki_surowe_dane/charakterystyka_3D/char_pionowa_3D/11_06_vertical_confirmation_2m.csv'
 patterns=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
 plot_multiple_patterns_from_csv(file_path, patterns)
