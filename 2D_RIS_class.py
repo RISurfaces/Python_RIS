@@ -128,6 +128,7 @@ if __name__=="__main__":
         analyzer.com_prep()
         analyzer.com_check()
         generator.com_check()
+        remote_head.resolution(step_resolution)
         RIS_list = ris_usb_init()
         freq_data = prepare_freq()
         steps_from_start = 0 # counts how many steps remote head did. Could be used to count actual measurement angle.
