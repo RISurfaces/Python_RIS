@@ -12,7 +12,6 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
         #sns.set(font_scale=1.2)  # Set the font scale for seaborn heatmap
         ax= sns.heatmap(heatmap_data, vmax=-50, vmin=-100,cbar_kws={'label': 'Received power [dBm]'}, cmap='viridis', annot=False, fmt=".2g")
         cbar= ax.collections[0].colorbar
-
         cbar.ax.yaxis.set_tick_params(labelsize=14) #Font size of colorbar numbers
         cbar.ax.yaxis.label.set_size(18) #Font size of colorbar label cbar_kws
         distance=1.5
@@ -23,8 +22,6 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
         plt.ylabel('Elevation angle [°]', fontsize=18)
         plt.xticks(fontsize=14)
         plt.yticks(fontsize=14)
-
-        
         plt.savefig(f'heatmap_pattern_{pattern}_dist_{distance}m.jpg', format='jpg', bbox_inches='tight')
         #plt.show()
         plt.close()

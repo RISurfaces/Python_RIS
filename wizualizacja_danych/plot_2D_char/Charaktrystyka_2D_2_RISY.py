@@ -23,7 +23,7 @@ def plot_multiple_patterns_from_csv(file_path, patterns):
         plt.plot(specific_pattern_df['Degrees'], specific_pattern_df['Power'], marker=marker, linestyle='-', label=pattern, color=color)
     plt.xlabel('Azimuth angle [°]', fontsize=28)
     plt.ylabel('Recived power [dBm]', fontsize=28)
-    plt.title('Recived power over RIS azimuth angle - with single RIS', fontsize=24)
+    plt.title('Recived power over RIS azimuth angle - with second RIS', fontsize=24)
     plt.xlim(45, 135)
     plt.ylim(power_min, power_max)
     plt.xticks([x *5 for x in range(9, 27)], rotation=45, fontsize=16)  
@@ -35,6 +35,6 @@ def plot_multiple_patterns_from_csv(file_path, patterns):
     
 
 # Adjusted for demonstration; replace with your actual file path and patterns
-file_path = open(r'C:\Users\Marcel\Python_RIS\Python_RIS\wyniki_surowe_dane\charakterystyka_2D\9_04_5_5GHz_1.5m_ch_ka.csv')
+file_path = open(r'C:\Users\Marcel\Python_RIS\Python_RIS\wyniki_surowe_dane\charakterystyka_2D\char_2_RIS_2D\2D_2RIS_1_5m_16_06.csv')
 patterns = [1,2,17,8,20,19]#,"Horizontal strips [0101]","Chessboard [1010/0101]","Chessboard [0101/1010]","Thick vertical strips [1100]","Thick vertical strips [0011]","Thicker vertical strips [11110000]","Thicker vertical strips [00001111]","Thick horizontal strips [1100]","Thick horizontal strips [0011]","Chessboard [11001100/00110011]", "Chest","Dartboard","Random 1","Random 2","Random 3","Random 4"]
 plot_multiple_patterns_from_csv(file_path, patterns)#"All elements turn on","Only first element turn on","Only last element turn on","Left side on",
