@@ -86,7 +86,7 @@ def pattern_loop(freq, angle, RIS_list : list):
                 ris.set_pattern(pattern["HEX"])
         analyzer.meas_prep(freq, span, analyzer_mode, revlevel, rbw)
         with open(trace_file, 'a+') as file:
-            file.write(angle+';'+str(ris.id)+";"+pattern["ID"]+";"+pattern["DESC"])  # Write information about pattern information
+            file.write(angle+";"+pattern["ID"]+";")  # Write information about pattern information
             file.write(";")
             file.close()  # CLose the file
             #RIS_usb.read_pattern() #Inofrmation about pattern set on RIS.
