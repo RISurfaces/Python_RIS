@@ -87,7 +87,7 @@ def angle_loop(freq_data : list, azimuth_steps_form_start : int, elevation_steps
         remote_head.rotate_down((2*elevation_steps_from_start) - elevation_step) # back to elevation start postion
         time.sleep(1.5)
         elevation_steps_from_start = -elevation_start_position
-        remote_head.rotate_right(azimuth_step) # move few steps to the right (descroption in config file)
+        remote_head.rotate_right(azimuth_step) # movee few steps to the right (descroption in config file)
         azimuth_steps_form_start += azimuth_step
     return True
        

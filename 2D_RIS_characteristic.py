@@ -73,7 +73,7 @@ def angle_loop(freq_data : list, steps_from_start : int) -> bool:
         angle = count_angle(steps_from_start)
         print("Aktualny kąt: ", angle)
         freq_loop(freq_data, angle)
-        remote_head.obrot_prawo(azimuth_step) # move few steps to the right (descroption in config file)
+        remote_head.rotate_right(azimuth_step) # move few steps to the right (descroption in config file)
         steps_from_start += azimuth_step
     return True
        
