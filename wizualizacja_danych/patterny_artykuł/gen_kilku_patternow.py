@@ -14,23 +14,24 @@ def display_images(paths):
                 axs[i, j].axis('off')
                 axs[i, j].set_title(f"Pattern {i * 2 + j + 1}")  # Dodanie podpisu
                 
-    legend_labels = {"ON": "green", "OFF": "#C0F6C7"}
+    legend_labels = {"ON": "blue", "OFF": "lightblue"}
     legend_handles = [plt.Rectangle((0, 0), 1, 1, color=color, edgecolor='black', linewidth=1) for color in legend_labels.values()]
     legend_texts = list(legend_labels.keys())
     
     fig.legend(legend_handles, legend_texts, loc='lower center', ncol=2, fontsize='large', title='Legend')  # Dodanie legendy
     
     plt.subplots_adjust(wspace=0.05, hspace=0.3)  # Zmniejszenie odstępów między obrazami
+    #plt.savefig(f'wizu_patternow_ENG.jpg', format='jpg', bbox_inches='tight')
     plt.show()
 
 # Przykładowe ścieżki do zdjęć
 image_paths = [
     "1_pattern.png",
     "2_pattern.png",
-    "17_pattern.png",
-    "19_pattern.png",
-    "21_pattern.png",
-    "26_pattern.png"
+    "3_pattern.png",
+    "4_pattern.png",
+    "5_pattern.png",
+    "6_pattern.png"
 ]
 
 # Wyświetlanie zdjęć

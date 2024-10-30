@@ -51,7 +51,7 @@ def generate_image(binary_string):
     for i in range(256):
         row = i // grid_size
         col = i % grid_size
-        color = "green" if binary_string[i] == '1' else "#C0F6C7"
+        color = "blue" if binary_string[i] == '1' else "lightblue"
         cell = tk.Frame(inner_frame, width=cell_size*2, height=cell_size, bg=color, highlightbackground="black", highlightthickness=1)
         cell.grid(row=row, column=col)
     

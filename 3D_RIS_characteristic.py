@@ -61,7 +61,7 @@ def pattern_loop(freq : int, azimuth_angle : str, elevation_angle : str):
         analyzer.meas_prep(freq, span, analyzer_mode, revlevel, rbw)
         RIS_usb.set_pattern(pattern["HEX"]) # comment for refernce measure
         with open(trace_file, 'a+') as file:
-            file.write(azimuth_angle+";"+elevation_angle+";"+pattern["ID"]+";")  # Write information about pattern and angle
+            file.write(round(azimuth_angle,2)+";"+round(elevation_angle, 2)+";"+pattern["ID"]+";")  # Write information about pattern and angle
             file.close()  # Close the file
         time.sleep(0.1)
         analyzer.trace_get()
@@ -87,7 +87,7 @@ def angle_loop(freq_data : list, azimuth_steps_form_start : int, elevation_steps
         remote_head.rotate_down((2*elevation_steps_from_start) - elevation_step) # back to elevation start postion
         time.sleep(1.5)
         elevation_steps_from_start = -elevation_start_position
-        remote_head.rotate_right(azimuth_step) # move few steps to the right (descroption in config file)
+        remote_head.rotate_right(azimuth_step) # movee few steps to the right (descroption in config file)
         azimuth_steps_form_start += azimuth_step
     return True
        
