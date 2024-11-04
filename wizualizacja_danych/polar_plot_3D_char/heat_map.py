@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 
-def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(79.2, 100.8)):
+def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
     df = pd.read_csv(file, sep=';', header=None, names=['horizontal','vertical' , 'pattern', 'freq', 'power'])
     for pattern in patterns:
         df_pattern = df[(df['pattern'] == pattern) & (df['horizontal'] >= horizontal_range[0]) & (df['horizontal'] <= horizontal_range[1])]
@@ -16,19 +16,19 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(79.2, 100.
         cbar.ax.yaxis.label.set_size(18) #Font size of colorbar label cbar_kws
         distance=1
         ax.invert_yaxis()
-        plt.title(f'Patern {pattern} on {distance}m - chamber', fontsize=22)
+        plt.title(f'Patern {pattern} on {distance}m', fontsize=22)
         #plt.title(f'Heatmap for pattern {pattern} on {distance}m', fontsize=22)
         plt.xlabel('Azimuth angle [°]', fontsize=18)
         plt.ylabel('Elevation angle [°]', fontsize=18)
         plt.xticks(fontsize=14)
         plt.yticks(fontsize=14)
-        plt.savefig(f'heatmap_pattern_{pattern}_dist_{distance}m_chamber.jpg', format='jpg', bbox_inches='tight')
+        plt.savefig(f'heatmap_pattern_{pattern}_dist_{distance}m_.jpg', format='jpg', bbox_inches='tight')
         #plt.show()
         plt.close()
 
 
 
 
-file_path=r'C:\Users\Paweł\Desktop\RIS\Ris\Python_RIS\wyniki_surowe_dane\charakterystyka_3D_komora_PIT\14_08_3D_5_5Ghz_1m_prec.csv'
+file_path=r'C:\Users\pawel.hatka\Python_RIS\wyniki_surowe_dane\charakterystyka_3D_nowe_anteny_AINFO\28_10_3D_5_5Ghz_1m_new_ant.csv'
 patterns=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
 plot_multiple_patterns_from_csv(file_path, patterns)
