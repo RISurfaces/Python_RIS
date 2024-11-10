@@ -38,37 +38,26 @@ except FileNotFoundError:
     print("File with patterns doesn't exist.")
     exit()
 
-def ris_pattern_negation(ris_pattern : str) -> str:
-    ris_pattern = int(ris_pattern,16)
-    ris_pattern = ~ris_pattern & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-    ris_pattern = hex(ris_pattern)
-    ris_pattern = str(ris_pattern)
-    no_of_zero_to_add = 66 - len(ris_pattern)
-    for i in range(no_of_zero_to_add):
-        ris_pattern = ris_pattern[:2] + '0' + ris_pattern [2:]
-    return ris_pattern
-
+def set_pattern_ris(pattern : str, ris : RIS_usb):
+        if ris.id != 0 and int(pattern["ID"]) in pattern_for_negation:
+            ris_pattern = ris.ris_pattern_negation(pattern["HEX"])
+        else:
+            ris_pattern = pattern["HEX"]
+        ris.set_pattern(ris_pattern)
+        return True
+    
 def pattern_loop(freq, RIS_list : list):
     for pattern in patterns_data:
         for ris in RIS_list:
-            if int(pattern["ID"]) in pattern_for_negation:
-                if ris.id == 0:
-                    ris_pattern = pattern["HEX"]
-                    ris.set_pattern(ris_pattern)
-                else:
-                    ris_pattern = ris_pattern_negation(pattern["HEX"])
-                    ris.set_pattern(ris_pattern)
-            else:
-                ris.set_pattern(pattern[["HEX"]])
-            ris.set_pattern(pattern["HEX"])
+            is_pattern_set = set_pattern_ris(pattern, ris)
         analyzer.meas_prep(freq, span, analyzer_mode, revlevel, rbw)
         with open(trace_file, 'a+') as file:
             file.write(str(ris.id)+";"+pattern["ID"]+";"+pattern["DESC"])  # Write information about pattern information
             file.write(";")
             file.close()  # CLose the file
             # RIS_usb.read_pattern() #Inofrmation about pattern set on RIS.
-        time.sleep(0.1)
-        analyzer.trace_get()
+            time.sleep(0.1)
+            analyzer.trace_get()
 
 def freq_loop(freq_data : list, RIS_list : list):
      for freq in freq_data:
