@@ -6,6 +6,7 @@ import numpy as np
 def plot_multiple_patterns_from_csv(file_path, patterns,vertical_val):
     df = pd.read_csv(file_path, delimiter=';', header=None)
     df.columns = ['horizontal', 'vertical', 'patern', 'freq', 'power']
+    print(df)
     for patern in patterns:
         for vertical in vertical_val:
             # Wybieramy dane dla danego paterns i vertical
@@ -27,7 +28,7 @@ def plot_multiple_patterns_from_csv(file_path, patterns,vertical_val):
             # Pokazanie wykresu
             plt.show()
 
-file_path=r'C:\Users\paoll\RIS\Python_RIS\wyniki\charakterystyka_3D\24_04_ch_ka_3D_5_5Ghz_1_5m.csv'
+file_path=r'C:\Users\Marcel\Python_RIS\Python_RIS\test\24_10_3D_5_5Ghz_1_5m_new_ant.csv'
 patterns=[13,14,15,16,17]
 vertical=[-27,-18,-9,9,18,27]
 plot_multiple_patterns_from_csv(file_path, patterns,vertical)
