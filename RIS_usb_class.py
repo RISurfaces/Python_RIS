@@ -21,38 +21,42 @@ class RIS_usb():
            exit()
            
            
-    def reset(self):
+    def reset(self) -> str:
         self.port.write(bytes('!Reset\n', 'utf-8'))
         time.sleep(ris_set_time)
-        while self.port.in_waiting:
-            response = self.port.readline().decode('utf-8').rstrip()
-            print(f"Response from resetting RIS: {response}")
-            time.sleep(0.1)
+        line = []
+        while True:
+            cc=str(self.port.readline().decode('utf-8').rstrip())
+            print(cc)
+            if cc == '#READY!':
+                break
+        return cc
                 
-    def set_BT_key(self, key : str):
-        self.port.write(bytes(f'!BT-Key={key}', 'utf-8'))
+    def set_BT_key(self, key : str) -> str:
+        self.port.write(bytes(f'!BT-Key={key}\n', 'utf-8'))
         # Wait long enough or check self.port.NumBytesAvailable for becoming non-zero
         time.sleep(2)
         response = self.port.readline().decode('utf-8').rstrip()
         print(f"Response from setting a new Static Pass Key: {response}")
+        return response
     
-    def set_pattern(self, pattern : str):
+    def set_pattern(self, pattern : str) -> bool:
         self.port.write(bytes(f"!{pattern}\n", 'utf-8'))
         time.sleep(ris_set_time)
+        return True
         
-    def read_EXT_voltage(self) -> float:
+    def read_EXT_voltage(self) -> str:
         self.port.write(bytes('?Vext\n', 'utf-8'))
-        externalVoltage = float(self.port.readline().decode('utf-8').rstrip())
+        externalVoltage = self.port.readline().decode('utf-8').rstrip()
         print(f"External supply voltage: {externalVoltage}")
         return externalVoltage
 
-    def read_pattern(self):
+    def read_pattern(self) -> str:
         self.port.write(bytes('?Pattern\n', 'utf-8'))
         time.sleep(ris_set_time)
-        while self.port.in_waiting:
-            response = self.port.readline().decode('utf-8').rstrip()
-            print(f"Response from resetting RIS: {response}")
-            time.sleep(ris_set_time)
+        response = self.port.readline().decode('utf-8').rstrip()
+        print(f"Response from resetting RIS: {response}")
+        return response
             
     def ris_pattern_negation(self, ris_pattern : str) -> str:
         ris_pattern = int(ris_pattern,16)
