@@ -1,23 +1,68 @@
 import asyncio
-from bleak import *
+from bleak import BleakScanner, BleakClient
+
+# Zdefiniowane identyfikatory UUID dla charakterystyk
+WRITE = ["6e400001-c352-11e5-953d-0002a5d5c51b", "6e400003-c352-11e5-953d-0002a5d5c51b"]
+
+READ = [
+    "6e400001-c352-11e5-953d-0002a5d5c51b",
+    "6e400002-c352-11e5-953d-0002a5d5c51b",
+    "6e400003-c352-11e5-953d-0002a5d5c51b",
+]
+
+PATTERN = "!0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\n"
 
 
-WRITE = "6e400002-c352-11e5-953d-0002a5d5c51b"
-READ = "6e400003-c352-11e5-953d-0002a5d5c51b"
 async def main():
+    # Wyszukiwanie urządzeń BLE
     devices = await BleakScanner.discover()
-    #for device in devices:
-        #print(device)
-    ble_address = "00:18:DA:32:38:8F"
-    async with BleakClient(ble_address) as client:
-        # we’ll do the read/write operations here
-        print("Connected to BLE device")
-        print(client.is_connected)
-        await client.write_gatt_char(WRITE,b"?SerialNo", response=True)
-        await asyncio.sleep(0.5)
-        response = await client.read_gatt_char(READ)
-        print(response)
+    if not devices:
+        print("Nie znaleziono żadnych urządzeń BLE!")
+        return
 
+    # Wybierz urządzenie po jego adresie (jeśli jest znany) lub po nazwie
+    ble_address = "00:18:DA:32:38:8F"  # adres MAC Twojego urządzenia BLE
+    device = next((d for d in devices if d.address == ble_address), None)
+
+    if not device:
+        print(f"Nie znaleziono urządzenia z adresem {ble_address}")
+        return
+
+    print(f"Znaleziono urządzenie: {device.name} ({device.address})")
+
+    # Łączenie się z urządzeniem BLE
+    async with BleakClient(device) as client:
+        print(f"Połączono z urządzeniem: {device.name}")
+
+        # Przykładowe zapisanie danych w descriptorze (upewnij się, że używasz odpowiedniego UUID)
+        try:
+            await client.write_gatt_descriptor(16, b"\x01\x00")
+        except Exception as e:
+            print(f"Błąd podczas zapisywania descriptora: {e}")
+
+        print(f"Połączono: {client.is_connected}")
+
+        # Pisanie do charakterystyk (WRITE)
+        for characteristic in WRITE:
+            try:
+                print(f"Pisanie do charakterystyki: {characteristic}")
+                await client.write_gatt_char(
+                    characteristic, f"0100{PATTERN}000A", response=False
+                )
+            except Exception as e:
+                print(f"Błąd podczas pisania do {characteristic}: {e}")
+
+        await asyncio.sleep(1)
+
+        # Odczyt danych z charakterystyk (READ)
+        for characteristic in READ:
+            try:
+                print(f"Odczyt z charakterystyki: {characteristic}")
+                response = await client.read_gatt_char(characteristic)
+                print(f"Odpowiedź z {characteristic}: {response}")
+            except Exception as e:
+                print(f"Błąd podczas odczytu z {characteristic}: {e}")
+
+
+# Uruchomienie aplikacji
 asyncio.run(main())
-
-    
