@@ -1,6 +1,28 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import csv
+
+def maximum_val(file_path):
+    power_values = []
+    # Patterny, które sprawdzamy
+    filter_values = {1, 20, 17, 8}
+
+    with open(file_path, mode='r') as file:
+        reader = csv.reader(file, delimiter=';')
+        for row in reader:
+            # Sprawdź, czy wiersz nie jest pusty
+            if row:
+                # Sprawdź, czy wartość w 3 kolumnie (konwertując na int) jest w zbiorze filter_values
+                if int(row[2]) in filter_values:
+                    power_values.append(float(row[-1]))
+
+    
+    if power_values:
+        max_value = max(power_values)
+        print("Maksymalna wartość w ostatniej kolumnie dla wybranych wierszy:", max_value)
+    else:
+        print("Brak wierszy spełniających kryteria.")
 
 
 def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
