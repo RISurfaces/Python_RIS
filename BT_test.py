@@ -5,7 +5,6 @@ from bleak import BleakScanner, BleakClient
 WRITE = ["6e400002-c352-11e5-953d-0002a5d5c51b"]
 
 READ = [
-
     "6e400003-c352-11e5-953d-0002a5d5c51b",
 ]
 
@@ -20,7 +19,10 @@ async def main():
         return
 
     # Wybierz urządzenie po jego adresie (jeśli jest znany) lub po nazwie
-    ble_address = ["00:18:DA:32:38:8F", "00:18:DA:32:38:8D"]  # adres MAC Twojego urządzenia BLE
+    ble_address = [
+        "00:18:DA:32:38:8F",
+        "00:18:DA:32:38:8D",
+    ]  # adres MAC Twojego urządzenia BLE
     for adress in ble_address:
         device = next((d for d in devices if d.address == adress), None)
         if not device:
@@ -45,14 +47,16 @@ async def main():
             for characteristic in WRITE:
                 try:
                     print(f"Pisanie do charakterystyki: {characteristic}")
-                    command_data = bytearray([0x01]) + PATTERN.encode("utf-8") + bytearray([0x0A])
+                    command_data = (
+                        bytearray([0x01]) + PATTERN.encode("utf-8") + bytearray([0x0A])
+                    )
                     await client.write_gatt_char(
                         characteristic, command_data, response=False
                     )
                 except Exception as e:
                     print(f"Błąd podczas pisania do {characteristic}: {e}")
 
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.1)
 
             # Odczyt danych z charakterystyk (READ)
             for characteristic in READ:
