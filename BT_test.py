@@ -2,7 +2,7 @@ import asyncio
 from bleak import BleakScanner, BleakClient
 
 # Zdefiniowane identyfikatory UUID dla charakterystyk
-WRITE = ["6e400001-c352-11e5-953d-0002a5d5c51b", "6e400003-c352-11e5-953d-0002a5d5c51b"]
+WRITE = ["6e400001-c352-11e5-953d-0002a5d5c51b", "6e400002-c352-11e5-953d-0002a5d5c51b","6e400003-c352-11e5-953d-0002a5d5c51b"]
 
 READ = [
     "6e400001-c352-11e5-953d-0002a5d5c51b",
@@ -10,7 +10,7 @@ READ = [
     "6e400003-c352-11e5-953d-0002a5d5c51b",
 ]
 
-PATTERN = "!0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\n"
+PATTERN = "!0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
 
 
 async def main():
@@ -46,8 +46,9 @@ async def main():
         for characteristic in WRITE:
             try:
                 print(f"Pisanie do charakterystyki: {characteristic}")
+                command_data = bytearray([0x01]) + PATTERN.encode("utf-8") + bytearray([0x0A])
                 await client.write_gatt_char(
-                    characteristic, f"0100{PATTERN}000A", response=False
+                    characteristic, command_data, response=False
                 )
             except Exception as e:
                 print(f"Błąd podczas pisania do {characteristic}: {e}")

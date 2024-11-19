@@ -59,7 +59,7 @@ def prepare_freq() -> list:
     return freq_data
 
 def set_pattern_ris(pattern : str, ris : RIS_usb):
-        if ris.id != 0 and int(pattern["ID"]) in pattern_for_negation:
+        if ris.id % 2 == 1 and int(pattern["ID"]) in pattern_for_negation:
             ris_pattern = ris.ris_pattern_negation(pattern["HEX"])
         else:
             ris_pattern = pattern["HEX"]
