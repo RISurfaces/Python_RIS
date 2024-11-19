@@ -56,7 +56,7 @@ def prepare_freq() -> list:
 
 
 def set_pattern_ris(pattern : str, ris : RIS_usb):
-        if ris.id != 0 and int(pattern["ID"]) in pattern_for_negation:
+        if ris.id % 2 == 1 and int(pattern["ID"]) in pattern_for_negation:
             ris_pattern = ris.ris_pattern_negation(pattern["HEX"])
         else:
             ris_pattern = pattern["HEX"]
@@ -66,6 +66,7 @@ def set_pattern_ris(pattern : str, ris : RIS_usb):
 def pattern_loop(freq, angle, RIS_list : list):
     print(pattern_for_negation)
     for pattern in patterns_data:
+        print(pattern["ID"])
         for ris in RIS_list:
            is_pattern_set = set_pattern_ris(pattern, ris)
         analyzer.meas_prep(freq, span, analyzer_mode, revlevel, rbw)
@@ -73,7 +74,7 @@ def pattern_loop(freq, angle, RIS_list : list):
             file.write(angle+";"+pattern["ID"]+";")  # Write information about pattern information
             file.write(";")
             file.close()  # CLose the file
-            #RIS_usb.read_pattern() #Inofrmation about pattern set on RIS.
+            RIS_usb.read_pattern() #Inofrmation about pattern set on RIS.
         time.sleep(0.1)
         analyzer.trace_get()
 
@@ -108,6 +109,7 @@ def ris_usb_init() -> list:
    
     
 if __name__=="__main__":
+    pattern_loop(1, "1", RIS_list=ris_usb_init())
     try:
         analyzer.com_prep()
         analyzer.com_check()
