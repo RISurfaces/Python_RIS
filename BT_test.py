@@ -2,11 +2,10 @@ import asyncio
 from bleak import BleakScanner, BleakClient
 
 # Zdefiniowane identyfikatory UUID dla charakterystyk
-WRITE = ["6e400001-c352-11e5-953d-0002a5d5c51b", "6e400002-c352-11e5-953d-0002a5d5c51b","6e400003-c352-11e5-953d-0002a5d5c51b"]
+WRITE = ["6e400002-c352-11e5-953d-0002a5d5c51b"]
 
 READ = [
-    "6e400001-c352-11e5-953d-0002a5d5c51b",
-    "6e400002-c352-11e5-953d-0002a5d5c51b",
+
     "6e400003-c352-11e5-953d-0002a5d5c51b",
 ]
 
@@ -21,48 +20,48 @@ async def main():
         return
 
     # Wybierz urządzenie po jego adresie (jeśli jest znany) lub po nazwie
-    ble_address = "00:18:DA:32:38:8F"  # adres MAC Twojego urządzenia BLE
-    device = next((d for d in devices if d.address == ble_address), None)
+    ble_address = ["00:18:DA:32:38:8F", "00:18:DA:32:38:8D"]  # adres MAC Twojego urządzenia BLE
+    for adress in ble_address:
+        device = next((d for d in devices if d.address == adress), None)
+        if not device:
+            print(f"Nie znaleziono urządzenia z adresem {adress}")
+            return
 
-    if not device:
-        print(f"Nie znaleziono urządzenia z adresem {ble_address}")
-        return
+        print(f"Znaleziono urządzenie: {device.name} ({device.address})")
 
-    print(f"Znaleziono urządzenie: {device.name} ({device.address})")
+        # Łączenie się z urządzeniem BLE
+        async with BleakClient(device) as client:
+            print(f"Połączono z urządzeniem: {device.name}")
 
-    # Łączenie się z urządzeniem BLE
-    async with BleakClient(device) as client:
-        print(f"Połączono z urządzeniem: {device.name}")
-
-        # Przykładowe zapisanie danych w descriptorze (upewnij się, że używasz odpowiedniego UUID)
-        try:
-            await client.write_gatt_descriptor(16, b"\x01\x00")
-        except Exception as e:
-            print(f"Błąd podczas zapisywania descriptora: {e}")
-
-        print(f"Połączono: {client.is_connected}")
-
-        # Pisanie do charakterystyk (WRITE)
-        for characteristic in WRITE:
+            # Przykładowe zapisanie danych w descriptorze (upewnij się, że używasz odpowiedniego UUID)
             try:
-                print(f"Pisanie do charakterystyki: {characteristic}")
-                command_data = bytearray([0x01]) + PATTERN.encode("utf-8") + bytearray([0x0A])
-                await client.write_gatt_char(
-                    characteristic, command_data, response=False
-                )
+                await client.write_gatt_descriptor(16, b"\x01\x00")
             except Exception as e:
-                print(f"Błąd podczas pisania do {characteristic}: {e}")
+                print(f"Błąd podczas zapisywania descriptora: {e}")
 
-        await asyncio.sleep(1)
+            print(f"Połączono: {client.is_connected}")
 
-        # Odczyt danych z charakterystyk (READ)
-        for characteristic in READ:
-            try:
-                print(f"Odczyt z charakterystyki: {characteristic}")
-                response = await client.read_gatt_char(characteristic)
-                print(f"Odpowiedź z {characteristic}: {response}")
-            except Exception as e:
-                print(f"Błąd podczas odczytu z {characteristic}: {e}")
+            # Pisanie do charakterystyk (WRITE)
+            for characteristic in WRITE:
+                try:
+                    print(f"Pisanie do charakterystyki: {characteristic}")
+                    command_data = bytearray([0x01]) + PATTERN.encode("utf-8") + bytearray([0x0A])
+                    await client.write_gatt_char(
+                        characteristic, command_data, response=False
+                    )
+                except Exception as e:
+                    print(f"Błąd podczas pisania do {characteristic}: {e}")
+
+            await asyncio.sleep(1)
+
+            # Odczyt danych z charakterystyk (READ)
+            for characteristic in READ:
+                try:
+                    print(f"Odczyt z charakterystyki: {characteristic}")
+                    response = await client.read_gatt_char(characteristic)
+                    print(f"Odpowiedź z {characteristic}: {response}")
+                except Exception as e:
+                    print(f"Błąd podczas odczytu z {characteristic}: {e}")
 
 
 # Uruchomienie aplikacji
