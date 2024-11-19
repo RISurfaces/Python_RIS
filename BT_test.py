@@ -20,8 +20,8 @@ async def main():
 
     # Wybierz urządzenie po jego adresie (jeśli jest znany) lub po nazwie
     ble_address = [
-        "00:18:DA:32:38:8F",
-        "00:18:DA:32:38:8D",
+        "00:18:DA:32:38:8F",  # A32388F
+        "00:18:DA:32:38:8D",  # A32388D
     ]  # adres MAC Twojego urządzenia BLE
     for adress in ble_address:
         device = next((d for d in devices if d.address == adress), None)
