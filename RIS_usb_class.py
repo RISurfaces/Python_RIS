@@ -6,7 +6,7 @@ import json
 try:
     with open ("config.json") as config_f:
         config = json.load(config_f)
-        ris_set_time = config["RIS_SET_TIME"]
+        RIS_SET_TIME_USB = config["RIS_SET_TIME_USB"]
 except FileNotFoundError:
     print("Brak pliku konfiguracyjnego.")
     exit()
@@ -23,7 +23,7 @@ class RIS_usb():
            
     def reset(self) -> str:
         self.port.write(bytes('!Reset\n', 'utf-8'))
-        time.sleep(ris_set_time)
+        time.sleep(RIS_SET_TIME_USB)
         line = []
         while True:
             cc=str(self.port.readline().decode('utf-8').rstrip())
@@ -42,7 +42,7 @@ class RIS_usb():
     
     def set_pattern(self, pattern : str) -> bool:
         self.port.write(bytes(f"!{pattern}\n", 'utf-8'))
-        time.sleep(ris_set_time)
+        time.sleep(RIS_SET_TIME_USB)
         return True
         
     def read_EXT_voltage(self) -> str:
@@ -53,7 +53,7 @@ class RIS_usb():
 
     def read_pattern(self) -> str:
         self.port.write(bytes('?Pattern\n', 'utf-8'))
-        time.sleep(ris_set_time)
+        time.sleep(RIS_SET_TIME_USB)
         response = self.port.readline().decode('utf-8').rstrip()
         print(f"Response from resetting RIS: {response}")
         return response

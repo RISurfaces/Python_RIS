@@ -1,6 +1,6 @@
 import analyzer
 import generator
-import RIS_usb
+import old_without_class.RIS_usb as RIS_usb
 import remote_head
 import json
 import numpy as np

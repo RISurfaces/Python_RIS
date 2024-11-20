@@ -1,12 +1,12 @@
 import analyzer
 import generator
-import RIS_usb
+import old_without_class.RIS_usb as RIS_usb
 import remote_head
 import json
 import numpy as np
 from RsSmw import *
 import time
-import RIS_usb
+import old_without_class.RIS_usb as RIS_usb
 
 try:
     with open ("config.json") as config_f:
