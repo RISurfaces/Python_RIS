@@ -21,6 +21,69 @@ class RIS_ble:
         self.ble_name = ble_name
         self.id = id
 
+    async def _set_pattern(self, pattern: str) -> str:
+        command_data = (
+            bytearray([0x01]) + f"{pattern}".encode("utf-8") + bytearray([0x0A])
+        )
+        try:
+            await self.client.write_gatt_char(WRITE_UUID, command_data, False)
+        except BleakCharacteristicNotFoundError:
+            print(
+                "[BLE_ERROR] There is no such write charactristic. Check config file."
+            )
+        time.sleep(RIS_SET_TIME_BLE)
+        try:
+            response = await self.client.read_gatt_char(READ_UUID, command_data, False)
+        except BleakCharacteristicNotFoundError:
+            print("[BLE_ERROR] There is no such read charactristic. Check config file.")
+        print(response)
+        return response
+
+    async def _reset(self) -> bool:
+        command_data = bytearray([0x01]) + "!Reset".encode("utf-8") + bytearray([0x0A])
+        try:
+            await self.client.write_gatt_char(WRITE_UUID, command_data, False)
+        except BleakCharacteristicNotFoundError:
+            print(
+                "[BLE_ERROR] There is no such write charactristic. Check config file."
+            )
+        time.sleep(RIS_SET_TIME_BLE)
+        return True
+
+    async def _read_EXT_voltage(self) -> str:
+        command_data = bytearray([0x01]) + f"?Vext".encode("utf-8") + bytearray([0x0A])
+        try:
+            await self.client.write_gatt_char(WRITE_UUID, command_data, False)
+        except BleakCharacteristicNotFoundError:
+            print(
+                "[BLE_ERROR] There is no such write charactristic. Check config file."
+            )
+        time.sleep(RIS_SET_TIME_BLE)
+        try:
+            response = await self.client.read_gatt_char(READ_UUID, command_data, False)
+        except BleakCharacteristicNotFoundError:
+            print("[BLE_ERROR] There is no such read charactristic. Check config file.")
+        print(response)
+        return response
+
+    async def _read_pattern(self) -> str:
+        command_data = (
+            bytearray([0x01]) + f"?Pattern".encode("utf-8") + bytearray([0x0A])
+        )
+        try:
+            await self.client.write_gatt_char(WRITE_UUID, command_data, False)
+        except BleakCharacteristicNotFoundError:
+            print(
+                "[BLE_ERROR] There is no such write charactristic. Check config file."
+            )
+        time.sleep(RIS_SET_TIME_BLE)
+        try:
+            response = await self.client.read_gatt_char(READ_UUID, command_data, False)
+        except BleakCharacteristicNotFoundError:
+            print("[BLE_ERROR] There is no such read charactristic. Check config file.")
+        print(response)
+        return response
+
     async def connect(self) -> bool:
         try:
             devices = await BleakScanner.discover()
@@ -69,20 +132,10 @@ class RIS_ble:
                         f"[BLE_ERROR] There is no such descriptor. Change value in config to 16."
                     )
                     return False
-                await self.reset()
-                return True
+                response = await self.reset()
+                return response
 
-    async def reset(self) -> str:
-        command_data = bytearray([0x01]) + "!Reset".encode("utf-8") + bytearray([0x0A])
-        try:
-            await self.client.write_gatt_char(WRITE_UUID, command_data, False)
-        except BleakCharacteristicNotFoundError:
-            print(
-                "[BLE_ERROR] There is no such write charactristic. Check config file."
-            )
-        time.sleep(RIS_SET_TIME_BLE)
-
-    async def connect_pattern(self, pattern: str) -> bool:
+    async def connect_pattern(self, pattern: str) -> str:
         try:
             devices = await BleakScanner.discover()
             self.device = next((d for d in devices if d.name == self.ble_name), None)
@@ -103,60 +156,56 @@ class RIS_ble:
                     f"[BLE_ERROR] There is no such descriptor. Change value in config to 16."
                 )
                 return False
-            await self.set_pattern(pattern)
+            response = await self.set_pattern(pattern)
+            return response
+
+    async def connect_read_voltage(self) -> str:
+        try:
+            devices = await BleakScanner.discover()
+            self.device = next((d for d in devices if d.name == self.ble_name), None)
+            if not self.device:
+                raise BleakError
+            print(
+                f"[BLE INFO] Device {self.ble_name} with addres {self.device.address} was found. ID of the device is {self.id}."
+            )
+        except BleakError:
+            print("[BLE ERROR] Device with given name was not found.")
+            return False
+        async with BleakClient(self.device) as self.client:
+            print(f"[BLE INFO] Connected to device {self.ble_name}.")
+            try:
+                await self.client.write_gatt_descriptor(DESCRIPTOR_NUMBER, b"\x01\x00")
+            except BleakError:
+                print(
+                    f"[BLE_ERROR] There is no such descriptor. Change value in config to 16."
+                )
+                return False
+            response = self._read_EXT_voltage()
+            return response
+
+    async def connect_read_pattern(self) -> bool:
+        try:
+            devices = await BleakScanner.discover()
+            self.device = next((d for d in devices if d.name == self.ble_name), None)
+            if not self.device:
+                raise BleakError
+            print(
+                f"[BLE INFO] Device {self.ble_name} with addres {self.device.address} was found. ID of the device is {self.id}."
+            )
+        except BleakError:
+            print("[BLE ERROR] Device with given name was not found.")
+            return False
+        async with BleakClient(self.device) as self.client:
+            print(f"[BLE INFO] Connected to device {self.ble_name}.")
+            try:
+                await self.client.write_gatt_descriptor(DESCRIPTOR_NUMBER, b"\x01\x00")
+            except BleakError:
+                print(
+                    f"[BLE_ERROR] There is no such descriptor. Change value in config to 16."
+                )
+                return False
+            response = await self._read_pattern()
             return True
-
-    async def set_pattern(self, pattern: str) -> str:
-        command_data = (
-            bytearray([0x01]) + f"{pattern}".encode("utf-8") + bytearray([0x0A])
-        )
-        try:
-            await self.client.write_gatt_char(WRITE_UUID, command_data, False)
-        except BleakCharacteristicNotFoundError:
-            print(
-                "[BLE_ERROR] There is no such write charactristic. Check config file."
-            )
-        time.sleep(RIS_SET_TIME_BLE)
-        try:
-            response = await self.client.read_gatt_char(READ_UUID, command_data, False)
-        except BleakCharacteristicNotFoundError:
-            print("[BLE_ERROR] There is no such read charactristic. Check config file.")
-        print(response)
-        return response
-
-    async def set_pattern(self, pattern: str) -> str:
-        command_data = bytearray([0x01]) + f"?Vext".encode("utf-8") + bytearray([0x0A])
-        try:
-            await self.client.write_gatt_char(WRITE_UUID, command_data, False)
-        except BleakCharacteristicNotFoundError:
-            print(
-                "[BLE_ERROR] There is no such write charactristic. Check config file."
-            )
-        time.sleep(RIS_SET_TIME_BLE)
-        try:
-            response = await self.client.read_gatt_char(READ_UUID, command_data, False)
-        except BleakCharacteristicNotFoundError:
-            print("[BLE_ERROR] There is no such read charactristic. Check config file.")
-        print(response)
-        return response
-
-    async def set_pattern(self, pattern: str) -> str:
-        command_data = (
-            bytearray([0x01]) + f"?Pattern".encode("utf-8") + bytearray([0x0A])
-        )
-        try:
-            await self.client.write_gatt_char(WRITE_UUID, command_data, False)
-        except BleakCharacteristicNotFoundError:
-            print(
-                "[BLE_ERROR] There is no such write charactristic. Check config file."
-            )
-        time.sleep(RIS_SET_TIME_BLE)
-        try:
-            response = await self.client.read_gatt_char(READ_UUID, command_data, False)
-        except BleakCharacteristicNotFoundError:
-            print("[BLE_ERROR] There is no such read charactristic. Check config file.")
-        print(response)
-        return response
 
     def ris_pattern_negation(self, pattern: str) -> str:
         pattern = int(pattern, 16)
