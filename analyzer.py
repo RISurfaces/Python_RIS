@@ -48,7 +48,7 @@ def meas_prep(freq : int, span : int, mode : str, revlevel : int, rbw : str):
     
 
 
-def trace_get():
+def trace_get(file_name):
     """Initialize continuous measurement, stop it after the desired time, query trace data"""
     analyzer.write_str_with_opc('INITiate')  
     sleep(int(MEASURE_TIME))  # Wait for preset record time
@@ -73,7 +73,7 @@ def trace_get():
             max_amp = amp
             max_x = x
         x = x+1
-    with open(TRACE_FILE, 'a+') as file:
+    with open(file_name, 'a+') as file:
         file.write(f'{(start_freq + max_x * step_size):.1f}')  # Write adequate frequency information
         file.write(";")
         file.write(f'{max_amp:.2f}')  # Write adequate amplitude information
