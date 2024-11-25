@@ -25,3 +25,4 @@ with open("wektor r_N_M.csv", mode="w", newline="") as file:
     for m in range(-M//2, M//2+1):
         for n in range(-N//2, N//2+1):
             writer.writerow([m, n, r[m][n + N//2]])
+
