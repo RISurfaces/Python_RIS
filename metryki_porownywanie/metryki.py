@@ -80,8 +80,8 @@ def MAE(data_X, data_Y):
 
 
 #MAIN
-path_X = '/Users/dawidbrzakala/Python_RIS_nowy/Python_RIS/wyniki_surowe_dane/charakterystyka_3D/char_pozioma_3D/13_06_ch_ka_3D_5_5Ghz_1m.csv'
-path_Y = '/Users/dawidbrzakala/Python_RIS_nowy/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_komora_PIT/13_08_3D_5_5Ghz_1m_chamber.csv'
+path_X = '/Users/dawidbrzakala/Python_RIS_nowy/Python_RIS/maximum.csv'
+path_Y = '/Users/dawidbrzakala/Python_RIS_nowy/Python_RIS/minimum.csv'
 pattern = 18
 horizontal_range=(45, 135) #Oganiczenie pobierania danych - dane z azymutu od 45 do 135 stopni
 data_set_X, data_set_Y = read_values_from_file(path_X), read_values_from_file(path_Y)
@@ -112,7 +112,7 @@ for pattern in range(1, 28):  # Od 1 do 27 włącznie
         results.append([pattern, None, None, None, None, None, None])  # Dodaj puste wartości w przypadku błędu
 
 # Zapis do pliku Excel
-output_filename = 'metryki_1m.xlsx'
+output_filename = 'metryki_idealny.xlsx'
 save_metrics_multiple_patterns_to_excel(output_filename, results)
 
 # wartosc = MSE(pattern_set_X,pattern_set_Y)
