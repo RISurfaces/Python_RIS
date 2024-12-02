@@ -80,7 +80,7 @@ def MAE(data_X, data_Y):
 
 
 #MAIN
-path_X = '/Users/dawidbrzakala/Python_RIS_nowy/Python_RIS/minimum.csv'
+path_X = '/Users/dawidbrzakala/Python_RIS_nowy/Python_RIS/maximum.csv'
 path_Y = '/Users/dawidbrzakala/Python_RIS_nowy/Python_RIS/minimum.csv'
 pattern = 18
 horizontal_range=(45, 135) #Oganiczenie pobierania danych - dane z azymutu od 45 do 135 stopni
