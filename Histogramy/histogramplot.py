@@ -42,23 +42,23 @@ def przetworz_plik_csv(plik_csv):
         # Ustawienie histogramu z dokładnymi wynikami (kwant=1)
         plt.hist(
             grupa["moc_odebrana_zaokraglona"],
-            bins=range(-100, -30 + 2),
+            bins=range(0, 40 + 2),
             color="blue",
             edgecolor="black",
             alpha=0.7,
         )
-        plt.title(f"Histogram mocy odebranej dla patternu {numer_patternu}")
+        plt.title(f"Histogram różnicy mocy odebranej dla patternu {numer_patternu}")
         plt.xlabel("Moc odebrana (zaokrąglona)")
         plt.ylabel("Liczba wystąpień")
 
         # Ustawienie stałej skali na osi Y
-        plt.ylim(0, 150)
+        plt.ylim(0, 80)
 
         # Ustawienie stałej skali na osi X
-        plt.xlim(-100, -30)
+        plt.xlim(0, 40)
 
         # Ustawienie osi X co 5 jednostek
-        plt.xticks(range(-100, -30 + 1, 5))
+        plt.xticks(range(0, 40 + 1, 5))
 
         # Włączenie siatki na osi Y
         plt.grid(axis="y", linestyle="--", alpha=0.7)
@@ -73,15 +73,9 @@ def przetworz_plik_csv(plik_csv):
 
 # Lista plików CSV do przetworzenia
 pliki_csv = [
-    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_nowe_anteny_AINFO/28_10_3D_5_5Ghz_1m_new_ant.csv",
-    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_nowe_anteny_AINFO/24_10_3D_5_5Ghz_1_5m_new_ant.csv",
-    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_nowe_anteny_AINFO/27_10_3D_5_5Ghz_2m_new_ant.csv",
-    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_komora_PIT/13_08_3D_5_5Ghz_1m_chamber.csv",
-    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_komora_PIT/13_08_3D_5_5Ghz_1_5m_chamber.csv",
-    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_komora_PIT/12_08_ch_ka_3D_horizontal_5_5Ghz_2m_komora.csv",
-    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D/char_pozioma_3D/13_06_ch_ka_3D_5_5Ghz_1m.csv",
-    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D/char_pozioma_3D/24_04_ch_ka_3D_5_5Ghz_1_5m_jest_zero_swap.csv",
-    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D/char_pozioma_3D/06_06_ch_ka_3D_horizontal_5_5Ghz_2m.csv",
+    r"D:\GitHub\Python_RIS\Dane_różnicowe\results_nowe_komora\wynik_1_5m.csv",
+    r"D:\GitHub\Python_RIS\Dane_różnicowe\results_nowe_komora\wynik_1m.csv",
+    r"D:\GitHub\Python_RIS\Dane_różnicowe\results_nowe_komora\wynik_2m.csv",
 ]
 # Przetwarzanie każdego pliku z listy
 for plik_csv in pliki_csv:
