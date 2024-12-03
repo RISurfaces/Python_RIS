@@ -12,7 +12,7 @@ def swap_columns_in_csv(input_file, output_file):
             row[0], row[1] = row[1], row[0]
 
     with open(output_file, "w", newline="", encoding="utf-8") as outfile:
-        writer = csv.writer(outfile)
+        writer = csv.writer(outfile, delimiter=";")
         writer.writerows(rows)
 
 
