@@ -1,0 +1,11 @@
+pliki_csv = [
+    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_nowe_anteny_AINFO/28_10_3D_5_5Ghz_1m_new_ant.csv",
+    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_nowe_anteny_AINFO/24_10_3D_5_5Ghz_1_5m_new_ant.csv",
+    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_nowe_anteny_AINFO/27_10_3D_5_5Ghz_2m_new_ant.csv",
+    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_komora_PIT/13_08_3D_5_5Ghz_1m_chamber.csv",
+    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_komora_PIT/13_08_3D_5_5Ghz_1_5m_chamber.csv",
+    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D_komora_PIT/12_08_ch_ka_3D_horizontal_5_5Ghz_2m_komora.csv",
+    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D/char_pozioma_3D/13_06_ch_ka_3D_5_5Ghz_1m.csv",
+    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D/char_pozioma_3D/24_04_ch_ka_3D_5_5Ghz_1_5m_jest_zero_swap.csv",
+    r"/Users/pawelplaczkiewicz/Documents/RIS_GitHub/Python_RIS/wyniki_surowe_dane/charakterystyka_3D/char_pozioma_3D/06_06_ch_ka_3D_horizontal_5_5Ghz_2m.csv",
+]
