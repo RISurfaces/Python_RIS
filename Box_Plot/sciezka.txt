@@ -1,0 +1,19 @@
+# Ścieżki do plików CSV
+plik_csv_lista = [
+    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_komora/wynik_1m.csv",
+    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_komora/wynik_1_5m.csv",
+    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_komora/wynik_2m.csv",
+    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_stare_anteny/wynik_1m.csv",
+    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_stare_anteny/wynik_1_5m.csv",
+    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_stare_anteny/wynik_2m.csv",
+    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_stare_komora/wynik_1m.csv",
+    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_stare_komora/wynik_1_5m.csv",
+    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_stare_komora/wynik_2m.csv",
+    # Dodaj więcej ścieżek do plików CSV tutaj
+]
+
+# Folder wynikowy
+folder_wynikowy = "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/box_plot_results"
+
+# Wybrane patterny
+wybrane_patterny = [1, 20, 17, 8, 22, 25]
