@@ -1,0 +1,15 @@
+file_pairs = [
+    (
+        r"D:\GitHub\Python_RIS\wyniki_surowe_dane\charakterystyka_3D\char_pozioma_3D\13_06_ch_ka_3D_5_5Ghz_1m.csv",
+        r"D:\GitHub\Python_RIS\wyniki_surowe_dane\charakterystyka_3D_nowe_anteny_AINFO\28_10_3D_5_5Ghz_1m_new_ant.csv",
+    ),  # Para 1
+    (
+        r"D:\GitHub\Python_RIS\wyniki_surowe_dane\charakterystyka_3D\char_pozioma_3D\24_04_ch_ka_3D_5_5Ghz_1_5m_jest_zero_swap_sort.csv",
+        r"D:\GitHub\Python_RIS\wyniki_surowe_dane\charakterystyka_3D_nowe_anteny_AINFO\24_10_3D_5_5Ghz_1_5m_new_ant_clear.csv",
+    ),  # Para 2
+    (
+        r"D:\GitHub\Python_RIS\wyniki_surowe_dane\charakterystyka_3D\char_pozioma_3D\06_06_ch_ka_3D_horizontal_5_5Ghz_2m.csv",
+        r"D:\GitHub\Python_RIS\wyniki_surowe_dane\charakterystyka_3D_nowe_anteny_AINFO\27_10_3D_5_5Ghz_2m_new_ant.csv",
+    ),
+    # Dodaj kolejne pary plików, jeśli potrzeba
+]
