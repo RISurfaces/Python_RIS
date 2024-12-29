@@ -56,10 +56,10 @@ def tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy):
             ax.set_ylim(-5, 50)
 
             # Dostosowanie tytułów i etykiet
-            ax.set_title(os.path.basename(plik_csv))
+            ax.set_title("")
             ax.set_xlabel("Pattern no.")
             ax.set_ylabel("Absolute value of the power difference [dB]")
-            plt.suptitle(f"Group {indeks + 1}", fontsize=16)
+            plt.suptitle(f"", fontsize=16)
 
         # Przygotowanie ścieżki zapisu
         nazwa_wykresu = f"group_{indeks + 1}.png"
