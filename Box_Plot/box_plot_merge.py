@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 # Funkcja do tworzenia subplotów wykresów pudełkowych
 def tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy):
     # Podziel pliki na grupy po 3
+    title = ["Distance 1 m", "Distance 1.5 m", "Distance 2 m"]
     grupy = [plik_csv_lista[i : i + 3] for i in range(0, len(plik_csv_lista), 3)]
 
     # Zmienna do przechowywania zakresu Y
@@ -55,10 +56,16 @@ def tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy):
             # Ustaw stałą skalę osi Y
             ax.set_ylim(-5, 50)
 
-            # Dostosowanie tytułów i etykiet
-            ax.set_title("")
-            ax.set_xlabel("Pattern no.")
-            ax.set_ylabel("Absolute value of the power difference [dB]")
+            # Dostosowanie czcionek
+            ax.tick_params(axis="x", labelsize=18)  # Czcionka dla osi X
+            ax.tick_params(axis="y", labelsize=18)  # Czcionka dla osi Y
+
+            # Dostosowanie {tytułów i etykiet
+            ax.set_title(f"{title[i]}", fontsize=18)
+            ax.set_xlabel("Pattern no.", fontsize=18)  # Czcionka dla etykiety osi X
+            ax.set_ylabel(
+                "Absolute value of the power difference [dB]", fontsize=18
+            )  # Czcionka dla etykiety osi Y
             plt.suptitle(f"", fontsize=16)
 
         # Przygotowanie ścieżki zapisu
