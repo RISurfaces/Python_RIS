@@ -60,12 +60,18 @@ def tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy):
             ax.tick_params(axis="x", labelsize=18)  # Czcionka dla osi X
             ax.tick_params(axis="y", labelsize=18)  # Czcionka dla osi Y
 
-            # Dostosowanie {tytułów i etykiet
+            # Dostosowanie tytułów
             ax.set_title(f"{title[i]}", fontsize=18)
             ax.set_xlabel("Pattern no.", fontsize=18)  # Czcionka dla etykiety osi X
-            ax.set_ylabel(
-                "Absolute value of the power difference [dB]", fontsize=18
-            )  # Czcionka dla etykiety osi Y
+
+            # Dodaj opis osi Y tylko do pierwszego subplota
+            if i == 0:
+                ax.set_ylabel(
+                    "Absolute value of the power difference [dB]", fontsize=18
+                )  # Czcionka dla etykiety osi Y
+            else:
+                ax.set_ylabel("")  # Usuń opis osi Y dla pozostałych subplotów
+
             plt.suptitle(f"", fontsize=16)
 
         # Przygotowanie ścieżki zapisu
