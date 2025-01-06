@@ -13,7 +13,7 @@ def tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy):
         17: 3,
         8: 4,
         22: 5,
-        19: 6,
+        26: 6,
     }
 
     # Podziel pliki na grupy po 3
