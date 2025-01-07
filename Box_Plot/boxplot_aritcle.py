@@ -54,6 +54,7 @@ def tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy):
                 ax=ax,
                 flierprops=dict(marker="o", markerfacecolor="red", markersize=8),
                 medianprops=dict(color="red", linewidth=2),
+                showfliers=False,
             )
 
             # Wypełnienie pudełek kolorem niebieskim
@@ -61,7 +62,7 @@ def tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy):
                 box.set_facecolor("blue")
 
             # Ustaw stałą skalę osi Y (dostosuj wg potrzeb)
-            ax.set_ylim(-5, 50)
+            ax.set_ylim(-1, 30)
 
             # Dostosowanie czcionek
             ax.tick_params(axis="x", labelsize=18)  # Czcionka dla osi X
@@ -95,9 +96,9 @@ def tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy):
 
 # Ścieżki do plików CSV
 plik_csv_lista = [
-    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_komora/wynik_1m.csv",
-    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_komora/wynik_1_5m.csv",
-    r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_komora/wynik_2m.csv",
+    # r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_komora/wynik_1m.csv",
+    # r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_komora/wynik_1_5m.csv",
+    # r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_komora/wynik_2m.csv",
     r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_stare_anteny/wynik_1m.csv",
     r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_stare_anteny/wynik_1_5m.csv",
     r"/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Dane_różnicowe/results_nowe_stare_anteny/wynik_2m.csv",
