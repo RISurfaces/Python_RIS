@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 def tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy):
     # Mapa, która przypisuje oryginalnym patternom (np. 1, 20, 17, 8, 22, 19)
     # nowe wartości w zakresie 1–6 (lub według potrzeb)
-    pattern_mapping = {1: 1, 20: 2, 17: 3, 8: 4, 22: 5, 26: 6}
+    pattern_mapping = {1: 1, 20: 2, 17: 3, 8: 4, 23: 5, 26: 6}
 
     # Podziel pliki na grupy po 3
     title = ["Distance 1 m", "Distance 1.5 m", "Distance 2 m"]
@@ -112,7 +112,7 @@ plik_csv_lista = [
 folder_wynikowy = "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/metryki_porownywanie/metryki_boxploty/box_plot_results_merge"
 
 # Wybrane patterny
-wybrane_patterny = [1, 20, 17, 8, 22, 26]
+wybrane_patterny = [1, 20, 17, 8, 23, 26]
 
 # Tworzenie subplotów wykresów dla grup plików CSV
 tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy)
