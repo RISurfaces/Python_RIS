@@ -100,10 +100,10 @@ plik_csv_lista = [
 ]
 
 # Folder wynikowy
-folder_wynikowy = "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/box_plot_results_merge"
+folder_wynikowy = "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/metryki_porownywanie/metryki_boxploty/box_plot_results_merge"
 
 # Wybrane patterny
-wybrane_patterny = [1, 20, 17, 8, 22, 19]
+wybrane_patterny = [1, 20, 17, 8, 23, 26]
 
 # Tworzenie subplotów wykresów dla grup plików CSV
 tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy)
