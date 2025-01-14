@@ -21,7 +21,7 @@ def tworz_subploty_wykresow(plik_csv_lista, wybrane_patterny, folder_wynikowy):
         max_moc = max(max_moc, df_wybrane["moc"].max())
 
     for indeks, grupa in enumerate(grupy):
-        plt.figure(figsize=(18, 6))
+        plt.figure(figsize=(18, 7))
 
         for i, plik_csv in enumerate(grupa):
             kolumny = ["kąt1", "kąt2", "pattern", "częstotliwość", "moc"]
