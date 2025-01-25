@@ -8,7 +8,7 @@ try:
         config = json.load(config_f)
         RIS_SET_TIME_USB = config["RIS_SET_TIME_USB"]
 except FileNotFoundError:
-    print("Brak pliku konfiguracyjnego.")
+    print("File with configuration doesn't exist.")
     exit()
 
 class RIS_usb():
