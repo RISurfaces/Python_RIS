@@ -6,18 +6,16 @@ from paho.mqtt import client as mqtt_client
 from paho import mqtt
 
 
-
 broker = "d24b7f97192047f6a48f86f35984e6eb.s1.eu.hivemq.cloud"
 port = 1883
-topic = "topic/pattern"
+topic_pattern = "topic_pattern/pattern"
+topic_com = "topic_pattern/command"
 # Generate a Client ID with the publish prefix.
 client_id = f"publish-{random.randint(0, 1000)}"
-username = "test2"
-password = "Tymbark123@"
 
 
 try:
-    with open ("config.json") as config_f:
+    with open("config.json") as config_f:
         config = json.load(config_f)
         ris_ports = config["RIS_PORTS"]
         config_f.close()
@@ -32,52 +30,58 @@ def connect_mqtt():
             print("Connected to MQTT Broker!")
         else:
             print("Failed to connect, return code %d\n", rc)
+
     client = mqtt_client.Client(client_id)
-    client.username_pw_set(username, password)
     client.on_connect = on_connect
-    client.tls_set(tls_version = mqtt.client.ssl.PROTOCOL_TLS)
     client.connect(broker, port)
     return client
 
-def check_voltage(RIS_list : list, client : mqtt_client):
+
+def check_voltage(RIS_list: list, client: mqtt_client):
     for ris in RIS_list:
         voltage = ris.read_EXT_voltage()
-        client.publish(topic, f"{ris.id} : {voltage}" )
-        
-def check_pattern(RIS_list : list, client : mqtt_client):
+        client.publish(topic_pattern, f"{ris.id} : {voltage}")
+
+
+def check_pattern(RIS_list: list, client: mqtt_client):
     for ris in RIS_list:
         pattern = ris.read_pattern()
-        client.publish(topic, f"{ris.id} : {pattern}")
+        client.publish(topic_pattern, f"{ris.id} : {pattern}")
 
-def set_pattern_with_ack(RIS_list : list, client : mqtt_client, commmand : str):
-     for ris in RIS_list:
+
+def set_pattern_with_ack(RIS_list: list, client: mqtt_client, commmand: str):
+    for ris in RIS_list:
         ris.set_pattern(commmand)
         pattern = ris.read_pattern()
-        client.publish(topic, f"{ris.id} : {pattern}" )
+        client.publish(topic_pattern, f"{ris.id} : {pattern}")
 
-def event_handler(commmand : str, RIS_list : list, client : mqtt_client):
+
+def event_handler(commmand: str, RIS_list: list, client: mqtt_client):
     if commmand == "?Vext":
         check_voltage(RIS_list, client)
     elif commmand == "?Pattern":
         check_pattern(RIS_list, client)
     else:
-        command = ''.join(('0x',command))
+        command = "".join(("0x", command))
         print(command)
         set_pattern_with_ack(commmand)
-            
-def subscribe(client: mqtt_client, RIS_list : list):
+
+
+def subscribe(client: mqtt_client, RIS_list: list):
     def on_message(client, userdata, msg):
         commmand = msg.payload.decode()
-        print(f"Received `{commmand}` from `{msg.topic}` topic")
+        print(f"Received `{commmand}` from `{msg.topic_pattern}` topic_pattern")
         event_handler(commmand, RIS_list, client)
-    client.subscribe(topic)
+
+    client.subscribe(topic_com)
     client.on_message = on_message
 
 
-def run(RIS_list : list, client : mqtt_client):
+def run(RIS_list: list, client: mqtt_client):
     subscribe(client, RIS_list)
     check_pattern(RIS_list, client)
     client.loop_forever()
+
 
 def ris_usb_init() -> list:
     RIS_list = []
@@ -89,7 +93,8 @@ def ris_usb_init() -> list:
         ris.reset()
     return RIS_list
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     RIS_list = ris_usb_init()
     client = connect_mqtt()
     run()

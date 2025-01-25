@@ -4,3 +4,4 @@ RsSmw
 pyserial
 numpy
 periphery
+"paho-mqtt<2.0.0"
