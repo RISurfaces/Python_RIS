@@ -68,8 +68,8 @@ def event_handler(commmand: str, RIS_list: list, client: mqtt_client):
     elif commmand == "?Pattern":
         check_RIS_pattern(RIS_list, client)
     else:
-        command = "".join(("0x", command))
-        set_pattern_with_ack(commmand)
+        val = "".join(("0x", command))
+        set_pattern_with_ack(val)
 
 
 def subscribe(client: mqtt_client, RIS_list: list):
