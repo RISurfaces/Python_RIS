@@ -63,9 +63,8 @@ class RIS_usb:
         self.port.write(bytes("?Pattern\n", "utf-8"))
         time.sleep(RIS_SET_TIME_USB)
         response = self.port.readline().decode("utf-8").rstrip()
-        if response != "#OK":
-            print(f"Response from resetting RIS: {response}")
-            return response
+        print(f"Response from resetting RIS: {response}")
+        return response
 
     def ris_pattern_negation(self, ris_pattern: str) -> str:
         ris_pattern = int(ris_pattern, 16)
