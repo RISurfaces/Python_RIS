@@ -49,9 +49,9 @@ def check_RIS_metadata(RIS_list: list, client: mqtt_client):
         client.publish(topic_pattern, f"Pattern: {ris.id} : {pattern}")
 
 
-def set_pattern_with_ack(RIS_list: list, client: mqtt_client):
+def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val : str):
     for ris in RIS_list:
-        ris.set_pattern(commmand)
+        ris.set_pattern(val)
         pattern = ris.read_pattern()
         client.publish(topic_pattern, f"Pattern: {ris.id} : {pattern}")
 
