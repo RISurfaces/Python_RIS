@@ -63,7 +63,7 @@ class RIS_usb:
         self.port.write(bytes("?Pattern\n", "utf-8"))
         time.sleep(RIS_SET_TIME_USB)
         response = self.port.readline().decode("utf-8").rstrip()
-        if response != "#OK\n":
+        if response != "#OK":
             print(f"Response from resetting RIS: {response}")
             return response
 
