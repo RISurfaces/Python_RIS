@@ -44,6 +44,8 @@ class RIS_usb:
 
     def set_pattern(self, pattern: str) -> bool:
         self.port.write(bytes(f"!{pattern}\n", "utf-8"))
+        time.sleep(0.1)
+        response = self.port.readline().decode("utf-8").rstrip()
         time.sleep(RIS_SET_TIME_USB)
         return True
 
@@ -55,7 +57,7 @@ class RIS_usb:
 
     def read_Serial_no(self) -> str:
         self.port.write(bytes("?SerialNo\n", "utf-8"))
-        serialNo = self.port.readline().decode("utf-8").rstrip()
+        serialNo = zc
         print(f"Serial number: {serialNo}")
         return serialNo
 
