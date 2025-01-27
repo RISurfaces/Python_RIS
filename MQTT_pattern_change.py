@@ -50,7 +50,7 @@ def check_RIS_metadata(RIS_list: list, client: mqtt_client):
             client.publish(topic_pattern, f"{val}")
 
 
-def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val: str):
+def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val: str, val2: str):
     for ris in RIS_list:
         ris.set_pattern(val)
         time.sleep(0.1)
@@ -74,8 +74,9 @@ def event_handler(command: str, RIS_list: list, client: mqtt_client):
     elif command == "?Pattern":
         check_RIS_pattern(RIS_list, client)
     else:
+        val2 = val
         val = "".join(("0x", command))
-        set_pattern_with_ack(RIS_list, client, val)
+        set_pattern_with_ack(RIS_list, client, val, val2)
 
 
 def subscribe(client: mqtt_client, RIS_list: list):
