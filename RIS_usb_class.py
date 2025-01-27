@@ -50,6 +50,12 @@ class RIS_usb():
         externalVoltage = self.port.readline().decode('utf-8').rstrip()
         print(f"External supply voltage: {externalVoltage}")
         return externalVoltage
+    
+    def read_Serial_no(self) -> str:
+        self.port.write(bytes('?SerialNo\n', 'utf-8'))
+        serialNo = self.port.readline().decode('utf-8').rstrip()
+        print(f"Serial number: {serialNo}")
+        return serialNo
 
     def read_pattern(self) -> str:
         self.port.write(bytes('?Pattern\n', 'utf-8'))

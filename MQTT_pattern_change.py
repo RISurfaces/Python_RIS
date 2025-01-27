@@ -6,10 +6,11 @@ from paho.mqtt import client as mqtt_client
 from paho import mqtt
 
 
-broker = "d24b7f97192047f6a48f86f35984e6eb.s1.eu.hivemq.cloud"
+broker = "192.168.8.213"
 port = 1883
-topic_pattern = "topic_pattern/pattern"
-topic_com = "topic_pattern/command"
+topic_pattern = "topic/pattern"
+topic_com = "topic/command"
+topic_params = "topic/params"
 # Generate a Client ID with the publish prefix.
 client_id = f"publish-{random.randint(0, 1000)}"
 
@@ -37,30 +38,33 @@ def connect_mqtt():
     return client
 
 
-def check_voltage(RIS_list: list, client: mqtt_client):
+def check_RIS_metadata(RIS_list: list, client: mqtt_client):
     for ris in RIS_list:
         voltage = ris.read_EXT_voltage()
-        client.publish(topic_pattern, f"{ris.id} : {voltage}")
-
-
-def check_pattern(RIS_list: list, client: mqtt_client):
-    for ris in RIS_list:
+        client.publish(topic_params, f"Voltage: {ris.id} : {voltage}")
+        pattern = ris.read_Serial_no()
+        client.publish(topic_params, f"Serial: {ris.id} : {pattern}")
+        ris.set_pattern(commmand)
         pattern = ris.read_pattern()
-        client.publish(topic_pattern, f"{ris.id} : {pattern}")
+        client.publish(topic_pattern, f"Pattern: {ris.id} : {pattern}")
 
 
-def set_pattern_with_ack(RIS_list: list, client: mqtt_client, commmand: str):
+def check_RIS_metadata(RIS_list: list, client: mqtt_client):
     for ris in RIS_list:
         ris.set_pattern(commmand)
         pattern = ris.read_pattern()
-        client.publish(topic_pattern, f"{ris.id} : {pattern}")
-
+        client.publish(topic_pattern, f"Pattern: {ris.id} : {pattern}")
+        
+def check_RIS_pattern (RIS_list : list, client: mqtt_client):
+        pattern = RIS_list[0].read_pattern()
+        pattern = pattern[3:-1]
+        client.publish(topic_pattern, f"{pattern}")
 
 def event_handler(commmand: str, RIS_list: list, client: mqtt_client):
-    if commmand == "?Vext":
-        check_voltage(RIS_list, client)
+    if commmand == "?Params":
+        cehck_RIS_metadata(RIS_list, client)
     elif commmand == "?Pattern":
-        check_pattern(RIS_list, client)
+        check_RIS_pattern(RIS_list, client)
     else:
         command = "".join(("0x", command))
         print(command)
