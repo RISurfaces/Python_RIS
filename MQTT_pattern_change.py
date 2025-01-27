@@ -46,7 +46,7 @@ def check_RIS_metadata(RIS_list: list, client: mqtt_client):
         client.publish(topic_params, f"Serial: {ris.id} : {pattern}")
         pattern = ris.read_pattern()
         if pattern != None:
-            val = pattern[3:0]
+            val = pattern[3:]
             client.publish(topic_params, f"Pattern: {val}")
 
 
@@ -56,7 +56,7 @@ def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val: str, val2: st
         time.sleep(0.1)
         pattern = ris.read_pattern()
         if pattern != None:
-            val_pat = pattern[3:0]
+            val_pat = pattern[3:]
             print(pattern)
             print()
             print(val)
@@ -66,7 +66,7 @@ def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val: str, val2: st
 def check_RIS_pattern(RIS_list: list, client: mqtt_client):
     pattern = RIS_list[0].read_pattern()
     if pattern != None:
-        val = pattern[3:0]
+        val = pattern[3:]
         print(pattern)
         print(val)
         client.publish(topic_pattern, f"{val}")
