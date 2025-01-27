@@ -54,11 +54,11 @@ def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val: str):
     for ris in RIS_list:
         ris.set_pattern(val)
         time.sleep(0.1)
-        pattern = ris.read_pattern()
-        print(pattern)
-        if pattern != None:
-            val_pat = pattern[3:-1]
-            client.publish(topic_pattern, f"{val}")
+        # pattern = ris.read_pattern()
+        # print(pattern)
+        # if pattern != None:
+        # val_pat = pattern[3:-1]
+        client.publish(topic_pattern, f"{val}")
 
 
 def check_RIS_pattern(RIS_list: list, client: mqtt_client):
