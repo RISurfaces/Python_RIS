@@ -54,11 +54,13 @@ def set_pattern_with_ack(RIS_list: list, client: mqtt_client):
         ris.set_pattern(commmand)
         pattern = ris.read_pattern()
         client.publish(topic_pattern, f"Pattern: {ris.id} : {pattern}")
-        
-def check_RIS_pattern (RIS_list : list, client: mqtt_client):
-        pattern = RIS_list[0].read_pattern()
-        pattern = pattern[3:-1]
-        client.publish(topic_pattern, f"{pattern}")
+
+
+def check_RIS_pattern(RIS_list: list, client: mqtt_client):
+    pattern = RIS_list[0].read_pattern()
+    pattern = pattern[3:-1]
+    client.publish(topic_pattern, f"{pattern}")
+
 
 def event_handler(commmand: str, RIS_list: list, client: mqtt_client):
     if commmand == "?Params":
@@ -101,4 +103,4 @@ def ris_usb_init() -> list:
 if __name__ == "__main__":
     RIS_list = ris_usb_init()
     client = connect_mqtt()
-    run()
+    run(RIS_list, client)
