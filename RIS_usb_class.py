@@ -66,8 +66,6 @@ class RIS_usb:
         if response != "#OK\n":
             print(f"Response from resetting RIS: {response}")
             return response
-        else:
-            continue
 
     def ris_pattern_negation(self, ris_pattern: str) -> str:
         ris_pattern = int(ris_pattern, 16)
