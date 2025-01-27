@@ -57,7 +57,7 @@ class RIS_usb:
 
     def read_Serial_no(self) -> str:
         self.port.write(bytes("?SerialNo\n", "utf-8"))
-        serialNo = zc
+        serialNo = self.port.readline().decode("utf-8").rstrip()
         print(f"Serial number: {serialNo}")
         return serialNo
 

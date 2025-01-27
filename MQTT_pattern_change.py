@@ -67,7 +67,6 @@ def check_RIS_pattern(RIS_list: list, client: mqtt_client):
         val = pattern[3:-1]
         client.publish(topic_pattern, f"{val}")
 
-
 def event_handler(command: str, RIS_list: list, client: mqtt_client):
     if command == "?Params":
         check_RIS_metadata(RIS_list, client)
