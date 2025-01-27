@@ -85,7 +85,6 @@ def subscribe(client: mqtt_client, RIS_list: list):
 
 def run(RIS_list: list, client: mqtt_client):
     subscribe(client, RIS_list)
-    check_pattern(RIS_list, client)
     client.loop_forever()
 
 
