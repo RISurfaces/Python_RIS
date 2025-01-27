@@ -53,7 +53,7 @@ def check_RIS_metadata(RIS_list: list, client: mqtt_client):
 def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val: str):
     for ris in RIS_list:
         ris.set_pattern(val)
-        time.sleep(1)
+        time.sleep(0.1)
         pattern = ris.read_pattern()
         print(pattern)
         if pattern != None:
