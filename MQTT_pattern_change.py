@@ -76,7 +76,7 @@ def event_handler(commmand: str, RIS_list: list, client: mqtt_client):
 def subscribe(client: mqtt_client, RIS_list: list):
     def on_message(client, userdata, msg):
         commmand = msg.payload.decode()
-        print(f"Received `{commmand}` from `{msg.topic_command}` topic_pattern")
+        print(f"Received `{commmand}` from `{topic_command}` topic_command")
         event_handler(commmand, RIS_list, client)
 
     client.subscribe(topic_com)
