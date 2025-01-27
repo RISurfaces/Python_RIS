@@ -45,25 +45,25 @@ def check_RIS_metadata(RIS_list: list, client: mqtt_client):
         pattern = ris.read_Serial_no()
         client.publish(topic_params, f"Serial: {ris.id} : {pattern}")
         pattern = ris.read_pattern()
-        pattern = pattern[3:-1]
+        val = pattern[3:-1]
         if pattern != "#OK":
-            client.publish(topic_pattern, f"{pattern}")
+            client.publish(topic_pattern, f"{val}")
 
 
 def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val: str):
     for ris in RIS_list:
         ris.set_pattern(val)
         pattern = ris.read_pattern()
-        ppattern = pattern[3:-1]
+        val = pattern[3:-1]
         if pattern != "#OK":
-            client.publish(topic_pattern, f"{pattern}")
+            client.publish(topic_pattern, f"{val}")
 
 
 def check_RIS_pattern(RIS_list: list, client: mqtt_client):
     pattern = RIS_list[0].read_pattern()
-    pattern = pattern[3:-1]
+    val = pattern[3:-1]
     if pattern != "#OK":
-        client.publish(topic_pattern, f"{pattern}")
+        client.publish(topic_pattern, f"{val}")
 
 
 def event_handler(command: str, RIS_list: list, client: mqtt_client):
