@@ -46,20 +46,23 @@ def check_RIS_metadata(RIS_list: list, client: mqtt_client):
         client.publish(topic_params, f"Serial: {ris.id} : {pattern}")
         ris.set_pattern(commmand)
         pattern = ris.read_pattern()
-        client.publish(topic_pattern, f"Pattern: {ris.id} : {pattern}")
+        if pattern != "#OK":
+            client.publish(topic_pattern, f"Pattern: {ris.id} : {pattern}")
 
 
 def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val: str):
     for ris in RIS_list:
         ris.set_pattern(val)
         pattern = ris.read_pattern()
-        client.publish(topic_pattern, f"Pattern: {ris.id} : {pattern}")
+        if pattern != "#OK":
+            client.publish(topic_pattern, f"Pattern: {ris.id} : {pattern}")
 
 
 def check_RIS_pattern(RIS_list: list, client: mqtt_client):
     pattern = RIS_list[0].read_pattern()
     pattern = pattern[3:-1]
-    client.publish(topic_pattern, f"{pattern}")
+    if pattern != "#OK":
+        client.publish(topic_pattern, f"{pattern}")
 
 
 def event_handler(command: str, RIS_list: list, client: mqtt_client):
@@ -74,8 +77,8 @@ def event_handler(command: str, RIS_list: list, client: mqtt_client):
 
 def subscribe(client: mqtt_client, RIS_list: list):
     def on_message(client, userdata, msg):
-        commmand = msg.payload.decode()
-        event_handler(commmand, RIS_list, client)
+        command = msg.payload.decode()
+        event_handler(command, RIS_list, client)
 
     client.subscribe(topic_com)
     client.on_message = on_message
