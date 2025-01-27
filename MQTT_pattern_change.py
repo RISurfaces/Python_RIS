@@ -60,6 +60,7 @@ def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val: str):
 def check_RIS_pattern(RIS_list: list, client: mqtt_client):
     pattern = RIS_list[0].read_pattern()
     pattern = pattern[3:-1]
+    print(pattern)
     if pattern != "#OK\n":
         client.publish(topic_pattern, f"{pattern}")
 
