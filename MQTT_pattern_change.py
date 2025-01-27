@@ -44,7 +44,6 @@ def check_RIS_metadata(RIS_list: list, client: mqtt_client):
         client.publish(topic_params, f"Voltage: {ris.id} : {voltage}")
         pattern = ris.read_Serial_no()
         client.publish(topic_params, f"Serial: {ris.id} : {pattern}")
-        ris.set_pattern(command)
         pattern = ris.read_pattern()
         if pattern != "#OK\n":
             client.publish(topic_pattern, f"{pattern}")
