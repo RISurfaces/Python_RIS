@@ -10,7 +10,7 @@ broker = "192.168.8.213"
 port = 1883
 topic_pattern = "topic/pattern"
 topic_com = "topic/command"
-topic_params = "topic/params"
+topic_params = "topic/Params"
 # Generate a Client ID with the publish prefix.
 client_id = f"publish-{random.randint(0, 1000)}"
 
