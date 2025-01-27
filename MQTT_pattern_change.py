@@ -58,7 +58,7 @@ def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val: str):
         print(pattern)
         if pattern != None:
             val_pat = pattern[3:-1]
-            client.publish(topic_pattern, f"{val_pat}")
+            client.publish(topic_pattern, f"{val}")
 
 
 def check_RIS_pattern(RIS_list: list, client: mqtt_client):
@@ -82,6 +82,7 @@ def subscribe(client: mqtt_client, RIS_list: list):
     def on_message(client, userdata, msg):
         command = msg.payload.decode()
         event_handler(command, RIS_list, client)
+
     client.subscribe(topic_com)
     client.on_message = on_message
 
