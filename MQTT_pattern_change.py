@@ -62,7 +62,7 @@ def check_RIS_pattern (RIS_list : list, client: mqtt_client):
 
 def event_handler(commmand: str, RIS_list: list, client: mqtt_client):
     if commmand == "?Params":
-        cehck_RIS_metadata(RIS_list, client)
+        check_RIS_metadata(RIS_list, client)
     elif commmand == "?Pattern":
         check_RIS_pattern(RIS_list, client)
     else:
