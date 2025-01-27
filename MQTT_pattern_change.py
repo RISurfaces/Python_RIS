@@ -69,7 +69,7 @@ def event_handler(commmand: str, RIS_list: list, client: mqtt_client):
         check_RIS_pattern(RIS_list, client)
     else:
         val = "".join(("0x", command))
-        set_pattern_with_ack(val)
+        set_pattern_with_ack(RIS_list, client, val)
 
 
 def subscribe(client: mqtt_client, RIS_list: list):
