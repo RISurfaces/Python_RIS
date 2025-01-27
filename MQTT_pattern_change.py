@@ -63,9 +63,8 @@ def set_pattern_with_ack(RIS_list: list, client: mqtt_client, val: str, val2: st
 
 def check_RIS_pattern(RIS_list: list, client: mqtt_client):
     pattern = RIS_list[0].read_pattern()
-    if pattern != None:
-        val = pattern[3:-1]
-        client.publish(topic_pattern, f"{val}")
+    val = pattern[3:-1]
+    client.publish(topic_pattern, f"{val}")
 
 
 def event_handler(command: str, RIS_list: list, client: mqtt_client):
