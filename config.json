@@ -21,7 +21,7 @@
     "ELEVATION_NO_ANGLES" : 6, 
     "RIS_PORT_COMMENT": "COM7 - Windows, /dev/tty.usbserial-D382L3CH - MacOS, linux-/dev/ttyUSB0",
     "RIS_PORT_COMMENT_2" : "UWAGA - RIS ułożony normalnie musi być na parzystej pozycji, a te odwrócone na nieparzystej na liście poniżej",
-    "RIS_PORTS" : ["COM11"], 
+    "RIS_PORTS" : ["COM7"], 
     "ID_FOR_NEGATION" : [5,6,7,8,9,10,11,12,15,16,17,18,19,20],
     "SPAN" : 0,
     "ANALYZER_MODE" : "MAXHold",
