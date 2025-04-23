@@ -7,7 +7,7 @@ import csv
 def maximum_val(file_path):
     power_values = []
     # Patterny, które sprawdzamy
-    filter_values = {1, 20, 17, 8}
+    filter_values = {1, 20, 17, 8, 23, 27}
 
     with open(file_path, mode="r") as file:
         reader = csv.reader(file, delimiter=";")
@@ -37,7 +37,7 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
     vertical = []
     for pattern in patterns:
         df_pattern = df[
-            (df["pattern"] == pattern)
+            (df["pattern"] == pattern[0])
             & (df["horizontal"] >= horizontal_range[0])
             & (df["horizontal"] <= horizontal_range[1])
         ]
@@ -51,23 +51,24 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
             vmax=-30,
             vmin=-100,
             cbar_kws={"label": "Received power [dBm]"},
-            cmap="viridis",
+            cmap="coolwarm",  # viridis - oryginalna paleta kolorów
             annot=False,
             fmt=".2g",
         )
         cbar = ax.collections[0].colorbar
         cbar.ax.yaxis.set_tick_params(labelsize=14)  # Font size of colorbar numbers
         cbar.ax.yaxis.label.set_size(18)  # Font size of colorbar label cbar_kws
-        distance = 1_5
         ax.invert_yaxis()
-        plt.title(f"Patern {pattern} on {distance}m", fontsize=22)
+        distance = "1.5"
+        add = ""
+        plt.title(f"Patern {pattern[1]} on {distance}m {add}", fontsize=22)
         # plt.title(f'Heatmap for pattern {pattern} on {distance}m', fontsize=22)
         plt.xlabel("Azimuth angle [°]", fontsize=18)
         plt.ylabel("Elevation angle [°]", fontsize=18)
         plt.xticks(fontsize=14)
         plt.yticks(fontsize=14)
         plt.savefig(
-            f"heatmap_pattern_{pattern}_dist_{distance}m_.jpg",
+            f"heatmap_pattern_{pattern[1]}_dist_{distance}m_{add}.jpg",
             format="jpg",
             bbox_inches="tight",
         )
@@ -75,6 +76,6 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
         plt.close()
 
 
-file_path = r"D:\GitHub\Python_RIS\wyniki_surowe_dane\charakterystyka_3D_nowe_anteny_AINFO\24_10_3D_5_5Ghz_1_5m_new_ant.csv"
-patterns = [1, 20, 17, 8]
+file_path = r"DANE_Z_POMIAROW/ComCom_01_2024/charakterystyka_3D_komora_PIT/12_08_ch_ka_3D_horizontal_5_5Ghz_2m_komora.csv"
+patterns = [(1, 1), (20, 2), (17, 3), (8, 4), (23, 5), (26, 6)]
 plot_multiple_patterns_from_csv(file_path, patterns)
