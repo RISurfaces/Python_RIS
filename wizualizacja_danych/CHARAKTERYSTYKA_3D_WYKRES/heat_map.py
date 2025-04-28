@@ -48,7 +48,7 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
         # sns.set(font_scale=1.2)  # Set the font scale for seaborn heatmap
         ax = sns.heatmap(
             heatmap_data,
-            vmax=-30,
+            vmax=-50,
             vmin=-100,
             cbar_kws={"label": "Received power [dBm]"},
             cmap="coolwarm",  # viridis - oryginalna paleta kolorów
@@ -59,8 +59,8 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
         cbar.ax.yaxis.set_tick_params(labelsize=14)  # Font size of colorbar numbers
         cbar.ax.yaxis.label.set_size(18)  # Font size of colorbar label cbar_kws
         ax.invert_yaxis()
-        distance = "1.5"
-        add = ""
+        distance = "2"
+        add = "AINFO"
         plt.title(f"Patern {pattern[1]} on {distance}m {add}", fontsize=22)
         # plt.title(f'Heatmap for pattern {pattern} on {distance}m', fontsize=22)
         plt.xlabel("Azimuth angle [°]", fontsize=18)
@@ -76,6 +76,6 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
         plt.close()
 
 
-file_path = r"DANE_Z_POMIAROW/ComCom_01_2024/charakterystyka_3D_komora_PIT/12_08_ch_ka_3D_horizontal_5_5Ghz_2m_komora.csv"
-patterns = [(1, 1), (20, 2), (17, 3), (8, 4), (23, 5), (26, 6)]
+file_path = r"DANE_Z_POMIAROW\ComCom_01_2024\charakterystyka_3D_nowe_anteny_AINFO\27_10_3D_5_5Ghz_2m_new_ant.csv"
+patterns = [(1, 1), (17, 3)]
 plot_multiple_patterns_from_csv(file_path, patterns)
