@@ -44,9 +44,8 @@ class RIS_usb:
 
     def set_pattern(self, pattern: str) -> bool:
         self.port.write(bytes(f"!{pattern}\n", "utf-8"))
-        time.sleep(0.1)
-        response = self.port.readline().decode("utf-8").rstrip()
         time.sleep(RIS_SET_TIME_USB)
+        response = self.port.readline().decode("utf-8").rstrip()
         return True
 
     def read_EXT_voltage(self) -> str:
