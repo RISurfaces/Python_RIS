@@ -76,6 +76,6 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
         plt.close()
 
 
-file_path = r"DANE_Z_POMIAROW\ComCom_01_2024\charakterystyka_3D_nowe_anteny_AINFO\27_10_3D_5_5Ghz_2m_new_ant.csv"
-patterns = [(1, 1), (17, 3)]
+file_path = r"C:\Users\Marcel\Python_RIS\Python_RIS\DANE_Z_POMIAROW\ComCom_IEEEAccess\charakterystyka_3D_nowe_anteny_AINFO\27_10_3D_5_5Ghz_2m_new_ant.csv"
+patterns = [(20, 2)]
 plot_multiple_patterns_from_csv(file_path, patterns)
