@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import re 
 
 # Ścieżka do folderu z plikami
-input_folder = r'C:\Users\Paweł\Desktop\RIS\Ris\Python_RIS\Pomiary_SYBIS\wyniki'
-output_folder = r'C:\Users\Paweł\Desktop\RIS\Ris\Python_RIS\Pomiary_SYBIS\wykresy'  # Folder na wykresy
+input_folder = r'Python_RIS\DANE_Z_POMIAROW\V2X_INFOCOM2024\wyniki_jeden_RIS'
+output_folder = r'Python_RIS\DANE_Z_POMIAROW\V2X_INFOCOM2024\wykresy\wyniki_jeden_ris_22_04_2025'  # Folder na wykresy
 
 
 # Tworzenie folderu na wykresy, jeśli nie istnieje

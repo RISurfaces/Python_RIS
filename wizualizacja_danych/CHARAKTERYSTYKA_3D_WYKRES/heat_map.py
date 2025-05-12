@@ -59,9 +59,9 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
         cbar.ax.yaxis.set_tick_params(labelsize=14)  # Font size of colorbar numbers
         cbar.ax.yaxis.label.set_size(18)  # Font size of colorbar label cbar_kws
         ax.invert_yaxis()
-        distance = "2"
-        add = "AINFO"
-        plt.title(f"Patern {pattern[1]} on {distance}m {add}", fontsize=22)
+        distance = "1"
+        add = "METIS"
+        plt.title(f"Pattern {pattern[1]} on {distance}m {add}", fontsize=22)
         # plt.title(f'Heatmap for pattern {pattern} on {distance}m', fontsize=22)
         plt.xlabel("Azimuth angle [°]", fontsize=18)
         plt.ylabel("Elevation angle [°]", fontsize=18)
@@ -76,6 +76,6 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
         plt.close()
 
 
-file_path = r"DANE_Z_POMIAROW\ComCom_01_2024\charakterystyka_3D_nowe_anteny_AINFO\27_10_3D_5_5Ghz_2m_new_ant.csv"
-patterns = [(1, 1), (17, 3)]
+file_path = r"Python_RIS\DANE_Z_POMIAROW\KRIT2023_WiMOB2023\charakterystyka_3D\char_pozioma_3D\13_06_ch_ka_3D_5_5Ghz_1m.csv"
+patterns = [(20, 2), (17, 3)]  # (20, 2), (1, 1), (17, 3), (8, 4), (23, 5), (27, 6
 plot_multiple_patterns_from_csv(file_path, patterns)
