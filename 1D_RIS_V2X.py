@@ -54,7 +54,7 @@ def pattern_loop(freq, RIS_list: list, measure_point: str):
         for ris in RIS_list:
             is_pattern_set = set_pattern_ris(pattern, ris)
         analyzer.meas_prep(freq, span, analyzer_mode, revlevel, rbw)
-        with open(f"V2X_23_04_25_{measure_point}.csv", "a+") as file:
+        with open(f"V2X_12_05_25_{measure_point}.csv", "a+") as file:
             current_time = datetime.datetime.now()
             file.write(
                 pattern["ID"] + ";" + str(current_time)
@@ -63,7 +63,7 @@ def pattern_loop(freq, RIS_list: list, measure_point: str):
             file.close()  # CLose the file
             # RIS_usb.read_pattern() #Inofrmation about pattern set on RIS.
         time.sleep(3)
-        analyzer.trace_get(f"V2X_23_04_25_{measure_point}.csv")
+        analyzer.trace_get(f"V2X_12_05_25_{measure_point}.csv")
 
 
 def freq_loop(freq_data: list, RIS_list: list, measure_point: str):
