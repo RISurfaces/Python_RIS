@@ -10,7 +10,7 @@ def plot_multiple_patterns_from_csv(file_path, patterns):
     power_min = -92
     power_max = -50
     plt.figure(figsize=(15, 10))
-    colors=['orange','brown', 'gray', 'cyan', 'blue', 'purple']
+    colors=['orange','brown', 'black', 'green', 'blue', 'purple']
     markers = ['o','s', 'd', '^', 'v', 'p' ]
     for index, pattern in enumerate(patterns):
         specific_pattern_df = df[df['Paterns'] == pattern]
@@ -35,6 +35,6 @@ def plot_multiple_patterns_from_csv(file_path, patterns):
     
 
 # Adjusted for demonstration; replace with your actual file path and patterns
-file_path = open(r'Python_RIS\DANE_Z_POMIAROW\KRIT2023_WiMOB2023\charakterystyka_2D\char_2_RIS_2D\2D_2RIS_1_5m_16_06.csv')
-patterns = patterns = [1,20,17,8]
+file_path = open(r'C:\Users\brzak\Documents\GIT_Repository\Python_RIS\DANE_Z_POMIAROW\KRIT2023_WiMOB2023\charakterystyka_2D\char_2_RIS_2D\2D_2RIS_1_5m_16_06.csv')
+patterns = [1,2,23,26]
 plot_multiple_patterns_from_csv(file_path, patterns)#"All elements turn on","Only first element turn on","Only last element turn on","Left side on",

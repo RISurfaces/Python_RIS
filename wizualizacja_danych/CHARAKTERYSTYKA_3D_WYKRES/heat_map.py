@@ -7,7 +7,7 @@ import csv
 def maximum_val(file_path):
     power_values = []
     # Patterny, które sprawdzamy
-    filter_values = {1, 20, 17, 8, 23, 27}
+    filter_values = {23,26}
 
     with open(file_path, mode="r") as file:
         reader = csv.reader(file, delimiter=";")
@@ -28,16 +28,18 @@ def maximum_val(file_path):
 
 
 def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
+    plt.rcParams["font.family"] = "Times New Roman"
+    
     df = pd.read_csv(
         file,
         sep=";",
         header=None,
         names=["horizontal", "vertical", "pattern", "freq", "power"],
     )
-    vertical = []
+
     for pattern in patterns:
         df_pattern = df[
-            (df["pattern"] == pattern[0])
+            (df["pattern"] == pattern)
             & (df["horizontal"] >= horizontal_range[0])
             & (df["horizontal"] <= horizontal_range[1])
         ]
@@ -45,37 +47,40 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
             index="vertical", columns="horizontal", values="power"
         )
         plt.figure(figsize=(11, 10))
-        # sns.set(font_scale=1.2)  # Set the font scale for seaborn heatmap
         ax = sns.heatmap(
             heatmap_data,
             vmax=-50,
             vmin=-100,
             cbar_kws={"label": "Received power [dBm]"},
-            cmap="coolwarm",  # viridis - oryginalna paleta kolorów
+            cmap="coolwarm",
             annot=False,
             fmt=".2g",
         )
         cbar = ax.collections[0].colorbar
-        cbar.ax.yaxis.set_tick_params(labelsize=14)  # Font size of colorbar numbers
-        cbar.ax.yaxis.label.set_size(18)  # Font size of colorbar label cbar_kws
+        cbar.ax.yaxis.set_tick_params(labelsize=14)  
+        cbar.ax.yaxis.label.set_size(18)
+        cbar.ax.yaxis.label.set_weight("bold")
         ax.invert_yaxis()
-        distance = "1"
-        add = "METIS"
-        plt.title(f"Pattern {pattern[1]} on {distance}m {add}", fontsize=22)
-        # plt.title(f'Heatmap for pattern {pattern} on {distance}m', fontsize=22)
-        plt.xlabel("Azimuth angle [°]", fontsize=18)
-        plt.ylabel("Elevation angle [°]", fontsize=18)
-        plt.xticks(fontsize=14)
-        plt.yticks(fontsize=14)
-        plt.savefig(
-            f"heatmap_pattern_{pattern[1]}_dist_{distance}m_{add}.jpg",
-            format="jpg",
-            bbox_inches="tight",
-        )
-        # plt.show()
+
+
+        # Pogrubione tytuły i etykiety
+        plt.title(f"Heatmap for pattern 6 on 1m - anechoic chamber", fontsize=22, fontweight="bold")
+        plt.xlabel("Azimuth angle [°]", fontsize=18, fontweight="bold")
+        plt.ylabel("Elevation angle [°]", fontsize=18, fontweight="bold")
+        plt.xticks(fontsize=14, fontweight="bold")
+        plt.yticks(fontsize=14, fontweight="bold")
+        
+
+        # plt.savefig(
+        #     f"heatmap_pattern_{pattern}_dist_{distance}m_.jpg",
+        #     format="jpg",
+        #     bbox_inches="tight",
+        # )
+        plt.show()
         plt.close()
 
 
-file_path = r"Python_RIS\DANE_Z_POMIAROW\KRIT2023_WiMOB2023\charakterystyka_3D\char_pozioma_3D\13_06_ch_ka_3D_5_5Ghz_1m.csv"
-patterns = [(20, 2), (17, 3)]  # (20, 2), (1, 1), (17, 3), (8, 4), (23, 5), (27, 6
+file_path = r"C:\Users\brzak\Documents\GIT_Repository\Python_RIS\DANE_Z_POMIAROW\ComCom_IEEEAccess\charakterystyka_3D_nowe_anteny_AINFO\28_10_3D_5_5Ghz_1m_new_ant.csv"
+#patterns = [23] #pattern 5
+patterns = [26] #pattern 6
 plot_multiple_patterns_from_csv(file_path, patterns)

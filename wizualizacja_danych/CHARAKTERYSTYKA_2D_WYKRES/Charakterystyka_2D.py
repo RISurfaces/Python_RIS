@@ -8,9 +8,9 @@ def plot_multiple_patterns_from_csv(file_path, patterns):
     df = df.sort_values(by='Degrees')
     df = df[(df['Degrees'] >= 45) & (df['Degrees'] <= 135)]
     power_min = -92
-    power_max = -50
+    power_max = -44
     plt.figure(figsize=(15, 10))
-    colors=['orange','brown', 'gray', 'cyan', 'blue', 'purple']
+    colors=['orange','brown', 'black', 'green', 'blue', 'purple']
     markers = ['o','s', 'd', '^', 'v', 'p' ]
     for index, pattern in enumerate(patterns):
         specific_pattern_df = df[df['Paterns'] == pattern]
@@ -28,13 +28,13 @@ def plot_multiple_patterns_from_csv(file_path, patterns):
     plt.ylim(power_min, power_max)
     plt.xticks([x *5 for x in range(9, 27)], rotation=45, fontsize=16)  
     plt.yticks([y * 2 for y in range(int(power_min / 2), int(power_max / 2 + 1))], fontsize=16)  
-    plt.legend(["1", "2","3","4"], loc="upper right", prop={'size': 18}, borderaxespad=0.5, title_fontsize=18, title='')
+    plt.legend(["1", "2","5","6"], loc="upper right", prop={'size': 18}, borderaxespad=0.5, title_fontsize=18, title='')
     plt.grid(True)
-    plt.savefig(f'2D_pattern.jpg', format='jpg',  bbox_inches='tight')
+    #plt.savefig(f'2D_pattern.jpg', format='jpg',  bbox_inches='tight')
     plt.show()
     
 
 # Adjusted for demonstration; replace with your actual file path and patterns
-file_path = open(r'Python_RIS\DANE_Z_POMIAROW\KRIT2023_WiMOB2023\charakterystyka_2D\9_04_5_5GHz_1.5m_ch_ka.csv')
-patterns = [1,20,17,8]
+file_path = open(r'DANE_Z_POMIAROW/KRIT2023_WiMOB2023/charakterystyka_2D/9_04_5_5GHz_1.5m_ch_ka.csv')
+patterns = [1,2,23,26]
 plot_multiple_patterns_from_csv(file_path, patterns)#"All elements turn on","Only first element turn on","Only last element turn on","Left side on",
