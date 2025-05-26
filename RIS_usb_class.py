@@ -81,3 +81,6 @@ class RIS_usb:
         ris_pattern = ris_pattern.upper()
         ris_pattern = ris_pattern.replace("X", "x")
         return ris_pattern
+
+ris = RIS_usb("COM10", 1)
+ris.set_pattern("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
