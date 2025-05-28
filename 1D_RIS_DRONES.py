@@ -101,8 +101,7 @@ if __name__ == "__main__":
         analyzer.com_prep()
         analyzer.com_check()
         generator.com_check()
-        RIS_list = ris_usb_init()
-        RIS_ble = 
+        RIS_list = ris_usb_init() 
         freq_data = np.arange(start_freq, end_freq + step_freq, step_freq)
         freq_loop(freq_data, RIS_list)
         analyzer.meas_close()
