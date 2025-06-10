@@ -5,21 +5,27 @@ import seaborn as sns
 import os
 
 # Ścieżka do folderu zapisu
-output_folder = "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica/wykresy/112_90"  # <- ZMIEŃ TĘ ŚCIEŻKĘ
+output_folder = "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/bez_skrzynii"  # <- ZMIEŃ TĘ ŚCIEŻKĘ
 os.makedirs(output_folder, exist_ok=True)
 
 # Wczytaj dane
 df = pd.read_csv(
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112_90cm.csv",
+    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_suwnica_bez_skrzynii.csv",
     sep=";",
     header=None,
     names=["Pattern", "Position", "Frequency", "Power"],
 )
 
+# Skala kolorów
+vmin = -85
+vmax = -45
+
 # ====== HEATMAPA ======
 plt.figure(figsize=(10, 8))
 pivot = df.pivot(index="Pattern", columns="Position", values="Power")
-sns.heatmap(pivot, cmap="viridis", cbar_kws={"label": "Moc [dBm]"})
+sns.heatmap(
+    pivot, cmap="viridis", vmin=vmin, vmax=vmax, cbar_kws={"label": "Moc [dBm]"}
+)
 plt.title("Mapa mocy odebranej (Pattern vs Position)")
 plt.xlabel("Pozycja")
 plt.ylabel("Wzorzec")
@@ -34,7 +40,7 @@ ax = fig.add_subplot(111, projection="3d")
 x = df["Position"]
 y = df["Pattern"]
 z = df["Power"]
-sc = ax.scatter(x, y, z, c=z, cmap="viridis", marker="o")
+sc = ax.scatter(x, y, z, c=z, cmap="viridis", marker="o", vmin=vmin, vmax=vmax)
 ax.set_title("Wykres 3D mocy odebranej")
 ax.set_xlabel("Pozycja")
 ax.set_ylabel("Wzorzec")
