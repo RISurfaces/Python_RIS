@@ -1,65 +1,110 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+from matplotlib import rcParams
 
-# Ścieżka folderu do zapisu wykresów
-output_folder = "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica/wykresy/112_140"  # <- ZMIEŃ TĘ ŚCIEŻKĘ
+# Lista plików wejściowych i odpowiadających folderów wyjściowych
+file_list = [
+    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_dookolna.csv",
+    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112_90cm.csv",
+    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112cm_140cm.csv",
+    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_swunica_112_40cm.csv",
+    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_suwnica_bez_skrzynii.csv",
+]
+output_folders = [
+    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/dookolna",
+    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/112_90",
+    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/112_140",
+    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/112_40",
+    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/bez_skrzynii",
+]
 
-# Wczytaj dane z pliku CSV
-filename = "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112cm_140cm.csv"
-df = pd.read_csv(
-    filename, sep=";", header=None, names=["Pattern", "Position", "Frequency", "Power"]
-)
 
-# Upewnij się, że folder docelowy istnieje
-os.makedirs(output_folder, exist_ok=True)
+# Parametry czcionki
+font_properties = {
+    "font.family": "Times New Roman",
+    "font.size": 14,
+    "font.weight": "bold",
+}
+rcParams.update(font_properties)
 
-# Unikalne pozycje pomiarowe
-positions = sorted(df["Position"].unique())
+# Przetwarzanie każdego pliku
+for filename, output_folder in zip(file_list, output_folders):
+    # Upewnij się, że folder docelowy istnieje
+    os.makedirs(output_folder, exist_ok=True)
 
-# Listy do wykresu
-min_power = []
-max_power = []
-min_patterns = []
-max_patterns = []
+    # Wczytaj dane
+    df = pd.read_csv(
+        filename,
+        sep=";",
+        header=None,
+        names=["Pattern", "Position", "Frequency", "Power"],
+    )
 
-# Znajdź min i max dla każdej pozycji
-for pos in positions:
-    subset = df[df["Position"] == pos]
+    # Unikalne pozycje pomiarowe
+    positions = sorted(df["Position"].unique())
 
-    # Wiersz z najmniejszą mocą
-    min_row = subset.loc[subset["Power"].idxmin()]
-    min_power.append(min_row["Power"])
-    min_patterns.append(int(min_row["Pattern"]))
+    # Listy do wykresu
+    min_power = []
+    max_power = []
+    min_patterns = []
+    max_patterns = []
 
-    # Wiersz z największą mocą
-    max_row = subset.loc[subset["Power"].idxmax()]
-    max_power.append(max_row["Power"])
-    max_patterns.append(int(max_row["Pattern"]))
+    # Znajdź min i max dla każdej pozycji
+    for pos in positions:
+        subset = df[df["Position"] == pos]
 
-# Tworzenie wykresu
-plt.figure(figsize=(10, 6))
-plt.plot(positions, min_power, marker="o", label="Moc minimalna")
-plt.plot(positions, max_power, marker="o", label="Moc maksymalna")
+        min_row = subset.loc[subset["Power"].idxmin()]
+        min_power.append(min_row["Power"])
+        min_patterns.append(int(min_row["Pattern"]))
 
-# Dodaj opisy z numerami wzorców
-for x, y, p in zip(positions, min_power, min_patterns):
-    plt.text(x, y, str(p), ha="right", va="bottom", fontsize=8, color="blue")
+        max_row = subset.loc[subset["Power"].idxmax()]
+        max_power.append(max_row["Power"])
+        max_patterns.append(int(max_row["Pattern"]))
 
-for x, y, p in zip(positions, max_power, max_patterns):
-    plt.text(x, y, str(p), ha="left", va="top", fontsize=8, color="red")
+    # Tworzenie wykresu
+    plt.figure(figsize=(10, 6))
+    plt.plot(positions, min_power, marker="o", label="Moc minimalna")
+    plt.plot(positions, max_power, marker="o", label="Moc maksymalna")
 
-# Oznaczenia i zapis
-plt.title("Minimalna i maksymalna moc dla każdej pozycji")
-plt.xlabel("Numer pozycji pomiarowej")
-plt.ylabel("Moc odebrana [dBm]")
-plt.grid(True)
-plt.legend()
-plt.tight_layout()
+    # Opisy punktów
+    for x, y, p in zip(positions, min_power, min_patterns):
+        plt.text(
+            x,
+            y,
+            str(p),
+            ha="right",
+            va="bottom",
+            fontsize=10,
+            fontweight="bold",
+            color="blue",
+            fontname="Times New Roman",
+        )
 
-# Zapis wykresu
-output_path = os.path.join(output_folder, "min_max_wykres.png")
-plt.savefig(output_path)
-plt.close()
+    for x, y, p in zip(positions, max_power, max_patterns):
+        plt.text(
+            x,
+            y,
+            str(p),
+            ha="left",
+            va="top",
+            fontsize=10,
+            fontweight="bold",
+            color="red",
+            fontname="Times New Roman",
+        )
 
-print(f"Wykres zapisano jako: {output_path}")
+    # Oznaczenia i zapis
+    plt.title("Minimalna i maksymalna moc", fontweight="bold")
+    plt.xlabel("Numer pozycji", fontweight="bold")
+    plt.ylabel("Moc odebrana [dBm]", fontweight="bold")
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+
+    # Zapis wykresu
+    output_path = os.path.join(output_folder, "min_max_wykres.png")
+    plt.savefig(output_path)
+    plt.close()
+
+    print(f"Wykres zapisano jako: {output_path}")
