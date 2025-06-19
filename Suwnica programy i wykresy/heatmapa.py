@@ -3,10 +3,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 import matplotlib as mpl
+from matplotlib import rcParams
 
 # Ustaw Times New Roman jako domyślną czcionkę
-mpl.rcParams["font.family"] = "Times New Roman"
-mpl.rcParams["font.size"] = 14
+rcParams.update(
+    {"font.family": "Times New Roman", "font.size": 14, "font.weight": "bold"}
+)
 
 # Lista ścieżek do plików wejściowych
 input_files = [

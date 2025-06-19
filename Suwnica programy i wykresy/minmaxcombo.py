@@ -25,7 +25,9 @@ os.makedirs(output_folder, exist_ok=True)
 
 # Przygotowanie figury
 fig, axs = plt.subplots(2, 2, figsize=(14, 10))
-# fig.suptitle("Minimalna i maksymalna", fontsize=20, fontweight="bold")
+
+# Używane etykiety do wspólnej legendy
+legend_labels = []
 
 # Iteracja po plikach i osiach
 for idx, (filename, title) in enumerate(zip(file_list, subplot_titles)):
@@ -52,13 +54,22 @@ for idx, (filename, title) in enumerate(zip(file_list, subplot_titles)):
         max_patterns.append(int(max_row["Pattern"]))
 
     ax = axs[idx // 2][idx % 2]
-    ax.plot(positions, min_power, marker="o", label="Moc minimalna")
-    ax.plot(positions, max_power, marker="o", label="Moc maksymalna")
+    scatter_min = ax.scatter(
+        positions, min_power, label="Moc minimalna", color="blue", marker="o"
+    )
+    scatter_max = ax.scatter(
+        positions, max_power, label="Moc maksymalna", color="red", marker="o"
+    )
+
+    # Tylko raz dodaj etykiety do wspólnej legendy
+    if idx == 0:
+        legend_labels.append(scatter_min)
+        legend_labels.append(scatter_max)
 
     for x, y, p in zip(positions, min_power, min_patterns):
         ax.text(
-            x,
-            y,
+            x - 0.1,
+            y + 0.1,
             str(p),
             ha="right",
             va="bottom",
@@ -70,8 +81,8 @@ for idx, (filename, title) in enumerate(zip(file_list, subplot_titles)):
 
     for x, y, p in zip(positions, max_power, max_patterns):
         ax.text(
-            x,
-            y,
+            x + 0.1,
+            y - 0.1,
             str(p),
             ha="left",
             va="top",
@@ -85,11 +96,20 @@ for idx, (filename, title) in enumerate(zip(file_list, subplot_titles)):
     ax.set_xlabel("Numer pozycji", fontweight="bold")
     ax.set_ylabel("Moc odebrana [dBm]", fontweight="bold")
     ax.grid(True)
-    ax.legend()
 
-plt.tight_layout(rect=[0, 0.03, 1, 0.95])  # Dla miejsca na tytuł główny
+# Ustawienia układu i wspólna legenda
+plt.tight_layout(rect=[0, 0.05, 1, 0.95])
+fig.legend(
+    legend_labels,
+    ["Moc minimalna", "Moc maksymalna"],
+    loc="lower center",
+    ncol=2,
+    fontsize=14,
+)
+
+# Zapis wykresu
 output_path = os.path.join(output_folder, "min_max_wykres_zbiorczy.png")
-plt.savefig(output_path)
+plt.savefig(output_path, bbox_inches="tight")
 plt.close()
 
 print(f"Wykres zbiorczy zapisano jako: {output_path}")
