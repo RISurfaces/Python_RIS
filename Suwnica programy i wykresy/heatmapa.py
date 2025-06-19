@@ -7,7 +7,16 @@ from matplotlib import rcParams
 
 # Ustaw Times New Roman jako domyślną czcionkę
 rcParams.update(
-    {"font.family": "Times New Roman", "font.size": 14, "font.weight": "bold"}
+    {
+        "font.family": "Times New Roman",
+        "font.size": 14,
+        "font.weight": "bold",
+        "axes.labelweight": "bold",
+        "axes.titlesize": 14,
+        "axes.titleweight": "bold",
+        "xtick.labelsize": 14,
+        "ytick.labelsize": 14,
+    }
 )
 
 # Lista ścieżek do plików wejściowych
