@@ -23,10 +23,20 @@ subplot_titles = ["TX w P3 (antena dookólna)", "TX w P1", "TX w P2", "TX w P3"]
 output_folder = "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy"
 os.makedirs(output_folder, exist_ok=True)
 
+# Wczytaj wszystkie dane, żeby wyznaczyć wspólne limity Y
+all_data = pd.concat(
+    pd.read_csv(
+        f, sep=";", header=None, names=["Pattern", "Position", "Frequency", "Power"]
+    )
+    for f in file_list
+)
+y_min = all_data["Power"].min()
+y_max = all_data["Power"].max()
+
 # Przygotowanie figury
 fig, axs = plt.subplots(2, 2, figsize=(14, 10))
 
-# Używane etykiety do wspólnej legendy
+# Etykiety do wspólnej legendy
 legend_labels = []
 
 # Iteracja po plikach i osiach
@@ -61,7 +71,7 @@ for idx, (filename, title) in enumerate(zip(file_list, subplot_titles)):
         positions, max_power, label="Moc maksymalna", color="red", marker="o"
     )
 
-    # Tylko raz dodaj etykiety do wspólnej legendy
+    # Dodaj tylko raz do wspólnej legendy
     if idx == 0:
         legend_labels.append(scatter_min)
         legend_labels.append(scatter_max)
@@ -96,8 +106,9 @@ for idx, (filename, title) in enumerate(zip(file_list, subplot_titles)):
     ax.set_xlabel("Numer pozycji", fontweight="bold")
     ax.set_ylabel("Moc odebrana [dBm]", fontweight="bold")
     ax.grid(True)
+    ax.set_ylim(y_min - 1, y_max + 1)  # wyrównanie skali z małym marginesem
 
-# Ustawienia układu i wspólna legenda
+# Układ + wspólna legenda
 plt.tight_layout(rect=[0, 0.05, 1, 0.95])
 fig.legend(
     legend_labels,
