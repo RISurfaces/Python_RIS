@@ -23,7 +23,7 @@ class RIS_ble:
 
     async def _set_pattern(self, pattern: str) -> str:
         command_data = (
-            bytearray([0x01]) + f"{pattern}".encode("utf-8") + bytearray([0x0A])
+            bytearray([0x01]) + f"!0x{pattern}".encode("utf-8") + bytearray([0x0A])
         )
         try:
             await self.client.write_gatt_char(WRITE_UUID, command_data, False)
@@ -33,10 +33,32 @@ class RIS_ble:
             )
         time.sleep(RIS_SET_TIME_BLE)
         try:
-            response = await self.client.read_gatt_char(READ_UUID, command_data, False)
+            response = await self.client.read_gatt_char(READ_UUID)
         except BleakCharacteristicNotFoundError:
             print("[BLE_ERROR] There is no such read charactristic. Check config file.")
-        print(response)
+        return response
+
+    async def _set_multiple_patterns(self, patterns: json) -> str:
+        for pattern in patterns:
+            command_data = (
+                bytearray([0x01])
+                + f"!{pattern["HEX"]}".encode("utf-8")
+                + bytearray([0x0A])
+            )
+            try:
+                await self.client.write_gatt_char(WRITE_UUID, command_data, False)
+            except BleakCharacteristicNotFoundError:
+                print(
+                    "[BLE_ERROR] There is no such write charactristic. Check config file."
+                )
+            time.sleep(RIS_SET_TIME_BLE)
+            # tu kod do obslugi pomiaru w tej wersji
+            try:
+                response = await self.client.read_gatt_char(READ_UUID)
+            except BleakCharacteristicNotFoundError:
+                print(
+                    "[BLE_ERROR] There is no such read charactristic. Check config file."
+                )
         return response
 
     async def _reset(self) -> bool:
@@ -47,7 +69,7 @@ class RIS_ble:
             print(
                 "[BLE_ERROR] There is no such write charactristic. Check config file."
             )
-        time.sleep(RIS_SET_TIME_BLE)
+        await asyncio.sleep(0.1)
         return True
 
     async def _read_EXT_voltage(self) -> str:
@@ -58,12 +80,11 @@ class RIS_ble:
             print(
                 "[BLE_ERROR] There is no such write charactristic. Check config file."
             )
-        time.sleep(RIS_SET_TIME_BLE)
+        await asyncio.sleep(0.2)
         try:
-            response = await self.client.read_gatt_char(READ_UUID, command_data, False)
+            response = await self.client.read_gatt_char(READ_UUID)
         except BleakCharacteristicNotFoundError:
             print("[BLE_ERROR] There is no such read charactristic. Check config file.")
-        print(response)
         return response
 
     async def _read_pattern(self) -> str:
@@ -76,12 +97,11 @@ class RIS_ble:
             print(
                 "[BLE_ERROR] There is no such write charactristic. Check config file."
             )
-        time.sleep(RIS_SET_TIME_BLE)
+        await asyncio.sleep(0.1)
         try:
-            response = await self.client.read_gatt_char(READ_UUID, command_data, False)
+            response = await self.client.read_gatt_char(READ_UUID)
         except BleakCharacteristicNotFoundError:
             print("[BLE_ERROR] There is no such read charactristic. Check config file.")
-        print(response)
         return response
 
     async def connect(self) -> bool:
@@ -107,33 +127,29 @@ class RIS_ble:
                 return False
             return True
 
-        async def connect_reset(self) -> bool:
+    async def connect_reset(self) -> bool:
+        try:
+            devices = await BleakScanner.discover()
+            self.device = next((d for d in devices if d.name == self.ble_name), None)
+            if not self.device:
+                raise BleakError
+            print(
+                f"[BLE INFO] Device {self.ble_name} with addres {self.device.address} was found. ID of the device is {self.id}."
+            )
+        except BleakError:
+            print("[BLE ERROR] Device with given name was not found.")
+            return False
+        async with BleakClient(self.device) as self.client:
+            print(f"[BLE INFO] Connected to device {self.ble_name}.")
             try:
-                devices = await BleakScanner.discover()
-                self.device = next(
-                    (d for d in devices if d.name == self.ble_name), None
-                )
-                if not self.device:
-                    raise BleakError
-                print(
-                    f"[BLE INFO] Device {self.ble_name} with addres {self.device.address} was found. ID of the device is {self.id}."
-                )
+                await self.client.write_gatt_descriptor(DESCRIPTOR_NUMBER, b"\x01\x00")
             except BleakError:
-                print("[BLE ERROR] Device with given name was not found.")
+                print(
+                    f"[BLE_ERROR] There is no such descriptor. Change value in config to 16."
+                )
                 return False
-            async with BleakClient(self.device) as self.client:
-                print(f"[BLE INFO] Connected to device {self.ble_name}.")
-                try:
-                    await self.client.write_gatt_descriptor(
-                        DESCRIPTOR_NUMBER, b"\x01\x00"
-                    )
-                except BleakError:
-                    print(
-                        f"[BLE_ERROR] There is no such descriptor. Change value in config to 16."
-                    )
-                    return False
-                response = await self.reset()
-                return response
+            response = await self._reset()
+            return response
 
     async def connect_pattern(self, pattern: str) -> str:
         try:
@@ -156,7 +172,33 @@ class RIS_ble:
                     f"[BLE_ERROR] There is no such descriptor. Change value in config to 16."
                 )
                 return False
-            response = await self.set_pattern(pattern)
+            await asyncio.sleep(0.1)
+            response = await self._set_pattern(pattern)
+            return response
+
+    async def connect_multiple_patterns(self, patterns: json) -> str:
+        try:
+            devices = await BleakScanner.discover()
+            self.device = next((d for d in devices if d.name == self.ble_name), None)
+            if not self.device:
+                raise BleakError
+            print(
+                f"[BLE INFO] Device {self.ble_name} with addres {self.device.address} was found. ID of the device is {self.id}."
+            )
+        except BleakError:
+            print("[BLE ERROR] Device with given name was not found.")
+            return False
+        async with BleakClient(self.device) as self.client:
+            print(f"[BLE INFO] Connected to device {self.ble_name}.")
+            try:
+                await self.client.write_gatt_descriptor(DESCRIPTOR_NUMBER, b"\x01\x00")
+            except BleakError:
+                print(
+                    f"[BLE_ERROR] There is no such descriptor. Change value in config to 16."
+                )
+                return False
+            await asyncio.sleep(0.1)
+            response = await self._set_multiple_patterns(patterns)
             return response
 
     async def connect_read_voltage(self) -> str:
@@ -180,7 +222,7 @@ class RIS_ble:
                     f"[BLE_ERROR] There is no such descriptor. Change value in config to 16."
                 )
                 return False
-            response = self._read_EXT_voltage()
+            response = await self._read_EXT_voltage()
             return response
 
     async def connect_read_pattern(self) -> bool:
@@ -205,7 +247,7 @@ class RIS_ble:
                 )
                 return False
             response = await self._read_pattern()
-            return True
+            return response
 
     def ris_pattern_negation(self, pattern: str) -> str:
         pattern = int(pattern, 16)

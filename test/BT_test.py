@@ -27,8 +27,7 @@ async def main():
         device = next((d for d in devices if d.address == adress), None)
         if not device:
             print(f"Nie znaleziono urządzenia z adresem {adress}")
-            return
-
+            continue
         print(f"Znaleziono urządzenie: {device.name} ({device.address})")
 
         # Łączenie się z urządzeniem BLE
