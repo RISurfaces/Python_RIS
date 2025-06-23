@@ -62,7 +62,6 @@ def pattern_loop(freq, RIS_list: list, measure_point: str):
             file.write(";")
             file.close()  # CLose the file
             # RIS_usb.read_pattern() #Inofrmation about pattern set on RIS.
-        time.sleep(3)
         analyzer.trace_get(f"V2X_12_05_25_{measure_point}.csv")
 
 
