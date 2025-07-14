@@ -40,7 +40,8 @@ try:
 except FileNotFoundError:
     print("File with patterns doesn't exist.")
     exit()
-
-ris_ble = RIS_ble.RIS_ble("A-32388F", 0)
-response = asyncio.run(ris_ble.connect_multiple_patterns(patterns_data))
-print(response)
+while True:
+    input("Potwierdz start pomiaru: ")
+    ris_ble = RIS_ble.RIS_ble("A-3163CA", 0)
+    response = asyncio.run(ris_ble.connect_multiple_patterns())
+    print(response)
