@@ -22,7 +22,7 @@
     "RIS_PORT_COMMENT": "COM7 - Windows, /dev/tty.usbserial-D382L3CH - MacOS, linux-/dev/ttyUSB0",
     "RIS_PORT_COMMENT_2": "UWAGA - RIS ułożony normalnie musi być na parzystej pozycji, a te odwrócone na nieparzystej na liście poniżej",
     "RIS_PORTS": [
-        "/dev/ttyUSB1"
+        "COM11"
     ],
     "ID_FOR_NEGATION": [
         5,
@@ -53,7 +53,8 @@
     "RIS_SET_TIME_BLE": 0.1,
     "RIS_BLE_NAMES": [
         "A-32388F",
-        "A-32388D"
+        "A-32388D",
+        "A-3163CA"
     ],
     "CRANE_PORT": "/dev/ttyUSB0",
     "CRANE_PMW": 50,
