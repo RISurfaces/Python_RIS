@@ -55,11 +55,6 @@ class RIS_ble:
                     "[BLE_ERROR] There is no such write charactristic. Check config file."
                 )
                 exit()
-            analyzer.meas_prep(start_freq, span, analyzer_mode, revlevel, rbw)
-            with open(trace_file, "a+") as file:
-                file.write(pattern["ID"] + ";")
-                file.close()  # CLose the file
-                analyzer.trace_get(trace_file)
             try:
                 response = await self.client.read_gatt_char(READ_UUID)
             except BleakCharacteristicNotFoundError:
@@ -67,6 +62,11 @@ class RIS_ble:
                     "[BLE_ERROR] There is no such read charactristic. Check config file."
                 )
                 exit()
+            analyzer.meas_prep(start_freq, span, analyzer_mode, revlevel, rbw)
+            with open(trace_file, "a+") as file:
+                file.write(pattern["ID"] + ";")
+                file.close()  # CLose the file
+                analyzer.trace_get(trace_file)
         return response
 
     async def connect_multiple_patterns(self, patterns: json) -> str:
@@ -94,17 +94,8 @@ class RIS_ble:
             response = await self._set_multiple_patterns(patterns)
             return response
 
-    def ris_pattern_negation(self, pattern: str) -> str:
-        pattern = int(pattern, 16)
-        pattern = (
-            ~pattern
-            & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-        )
-        pattern = hex(pattern)
-        pattern = str(pattern)
-        no_of_zero_to_add = 66 - len(pattern)
-        for i in range(no_of_zero_to_add):
-            pattern = pattern[:2] + "0" + pattern[2:]
-        pattern = pattern.upper()
-        pattern = pattern.replace("X", "x")
-        return pattern
+
+input("Potwierdz start pomiaru: ")
+ris_ble = RIS_ble.RIS_ble("A-3163CA", 0)
+response = asyncio.run(ris_ble.connect_multiple_patterns())
+print(response)
