@@ -43,5 +43,5 @@ except FileNotFoundError:
 while True:
     input("Potwierdz start pomiaru: ")
     ris_ble = RIS_ble.RIS_ble("A-3163CA", 0)
-    response = asyncio.run(ris_ble.connect_multiple_patterns())
+    response = asyncio.run(ris_ble.connect_reset())
     print(response)

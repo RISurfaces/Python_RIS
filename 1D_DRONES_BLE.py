@@ -32,7 +32,14 @@ try:
 except FileNotFoundError:
     print("Brak pliku konfiguracyjnego.")
     exit()
-
+    
+try:
+    with open("RIS_patterns.json") as json_patterns:
+        patterns_obj = json.load(json_patterns)
+        patterns_data = patterns_obj["PATTERNS"]
+except FileNotFoundError:
+    print("File with patterns doesn't exist.")
+    exit()
 
 class RIS_ble:
     def __init__(self, ble_name: str, id: int) -> None:
@@ -96,6 +103,6 @@ class RIS_ble:
 
 
 input("Potwierdz start pomiaru: ")
-ris_ble = RIS_ble.RIS_ble("A-3163CA", 0)
-response = asyncio.run(ris_ble.connect_multiple_patterns())
+ris_ble = RIS_ble("A-3163CA", 0)
+response = asyncio.run(ris_ble.connect_multiple_patterns(patterns_data))
 print(response)
