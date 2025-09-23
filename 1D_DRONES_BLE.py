@@ -101,8 +101,12 @@ class RIS_ble:
             response = await self._set_multiple_patterns(patterns)
             return response
 
-
-input("Potwierdz start pomiaru: ")
-ris_ble = RIS_ble("A-3163CA", 0)
-response = asyncio.run(ris_ble.connect_multiple_patterns(patterns_data))
-print(response)
+while True:
+    input("Potwierdz start pomiaru: ")
+    ris_ble = RIS_ble("A-3163CA", 0)
+    try:
+        response = asyncio.run(ris_ble.connect_multiple_patterns(patterns_data))
+    except OSError:
+        print("[BLE] Weak BLE signal, try to come closer or try to manually reset module." )
+    print(response)
+    

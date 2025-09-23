@@ -2,43 +2,48 @@ from RsSmw import *
 import json
 
 try:
-    with open ("config.json") as config_f:
-        RsSmw.assert_minimum_version('5.0.44')
+    with open("config.json") as config_f:
+        RsSmw.assert_minimum_version("5.0.44")
         config = json.load(config_f)
         IP_ADDRESS_GENERATOR = config["IP_ADDRESS_GENERATOR"]
         PORT = config["PORT"]
         CONNECTION_TYPE = config["CONNECTION_TYPE"]
-        TRACE_FILE = config["TRACE_FILE"] 
+        TRACE_FILE = config["TRACE_FILE"]
         MEASURE_TIME = config["MEASURE_TIME"]
-        resource = f'TCPIP::{IP_ADDRESS_GENERATOR}::{PORT}::{CONNECTION_TYPE}'  # Resource string for the device
+        resource = f"TCPIP::{IP_ADDRESS_GENERATOR}::{PORT}::{CONNECTION_TYPE}"  # Resource string for the device
         try:
-            generator = RsSmw(resource, True, True, "SelectVisa='socket'")   
-        except TimeoutError or ConnectionAbortedError:
-            print("[TIMEOUT ERROR] Check is  computer and generator is connected to the same local network. Then try again.")
+            generator = RsSmw(resource, True, True, "SelectVisa='socket'")
+        except TimeoutError or ConnectionAbortedError or StatusException:
+            print(
+                "[TIMEOUT ERROR/SYNC ERROR] Check is computer and generator are connected to the same local network or is the devices are syncronized. Check all ethernet and bnc connections."
+            )
             exit()
         config_f.close()
 except FileNotFoundError:
     print("Brak pliku konfiguracyjnego.")
     exit()
 
+
 def com_check():
     generator.utilities.instrument_status_checking = True
     generator.repcap_hwInstance_set(repcap.HwInstance.InstA)
 
 
-def meas_prep(set : True, mode, amplitude : int, freq : int):
+def meas_prep(set: True, mode, amplitude: int, freq: int):
     generator.output.state.set_value(set)
     generator.source.frequency.set_mode(mode)
     generator.source.power.level.immediate.set_amplitude(amplitude)
     generator.source.frequency.fixed.set_value(freq)
-    #print(f'Channel 1 PEP level: {generator.source.power.get_pep()} dBm')
-    response = generator.utilities.query_str('*IDN?')
-    print(f'[GENERATOR HELLO]: {response}')
+    # print(f'Channel 1 PEP level: {generator.source.power.get_pep()} dBm')
+    response = generator.utilities.query_str("*IDN?")
+    print(f"[GENERATOR HELLO]: {response}")
+
 
 def meas_close():
     generator.close()
 
+
 if __name__ == "__main__":
     com_check()
-    meas_prep(True, enums.FreqMode.CW, -10, 5.5E9)
+    meas_prep(True, enums.FreqMode.CW, -10, 5.5e9)
     exit()
