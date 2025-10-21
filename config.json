@@ -1,6 +1,6 @@
 {
-    "IP_ADDRESS_ANALYZER": "192.168.8.20",
-    "IP_ADDRESS_GENERATOR": "192.168.8.30",
+    "IP_ADDRESS_ANALYZER": "192.168.1.30",
+    "IP_ADDRESS_GENERATOR": "192.168.1.20",
     "PORT": 5025,
     "CONNECTION_TYPE": "SOCKET",
     "TRACE_FILE": "Trace_file.csv",
@@ -22,7 +22,7 @@
     "RIS_PORT_COMMENT": "COM7 - Windows, /dev/tty.usbserial-D382L3CH - MacOS, linux-/dev/ttyUSB0",
     "RIS_PORT_COMMENT_2": "UWAGA - RIS ułożony normalnie musi być na parzystej pozycji, a te odwrócone na nieparzystej na liście poniżej",
     "RIS_PORTS": [
-        "COM11"
+        "/dev/ttyUSB0"
     ],
     "ID_FOR_NEGATION": [
         5,
@@ -41,10 +41,10 @@
         20
     ],
     "SPAN": 0,
-    "ANALYZER_MODE": "Average",
+    "ANALYZER_MODE": "MaxHold",
     "REVLEVEL": -30,
     "RBW": "500 Hz",
-    "GENERATOR_AMPLITUDE": -10,
+    "GENERATOR_AMPLITUDE": 15,
     "GENERATOR_MODE": "CW",
     "BLE_COMMENT": "BLE CONSTANTS, READ, WRITE CHARACTERISTICS AND DESCRIPTOR",
     "DESCRIPTOR_NUMBER": 16,

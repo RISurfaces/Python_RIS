@@ -90,9 +90,13 @@ if __name__ == "__main__":
         generator.com_check()
         RIS_list = ris_usb_init()
         freq_data = np.arange(start_freq, end_freq + step_freq, step_freq)
-        freq_loop(freq_data, RIS_list)
+        while True:
+            x = input("Write anything to start measurement: ")
+            for i  in range(5):
+                freq_loop(freq_data, RIS_list)
         analyzer.meas_close()
         generator.meas_close()
+        print("END IS NEAR")
         exit()
     except KeyboardInterrupt:
         print("[KEY]Keyboard interrupt.")
