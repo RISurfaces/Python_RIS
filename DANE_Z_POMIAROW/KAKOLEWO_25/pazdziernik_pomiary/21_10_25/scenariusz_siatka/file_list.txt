@@ -17,4 +17,4 @@ file_list = [
     "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_8_H_13_7m_V_2m.csv",
     "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_9_H_8_7m_V_3_5m.csv",
     "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_9_H_13_7m_V_3_2m.csv",
-]test
+]
