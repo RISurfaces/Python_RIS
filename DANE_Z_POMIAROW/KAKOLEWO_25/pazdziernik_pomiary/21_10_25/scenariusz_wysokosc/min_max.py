@@ -65,11 +65,11 @@ plt.figure(figsize=(9, 6))
 
 plt.plot(heights, max_powers, marker="o", color="blue", label="Moc maksymalna")
 for x, y, p in zip(heights, max_powers, max_patterns):
-    plt.text(x, y + 0.5, f"{p}", color="blue", fontsize=9, ha="center")
+    plt.text(x, y - 1.5, f"{p}", color="blue", fontsize=9, ha="center")
 
 plt.plot(heights, min_powers, marker="o", color="red", label="Moc minimalna")
 for x, y, p in zip(heights, min_powers, min_patterns):
-    plt.text(x, y - 1.0, f"{p}", color="red", fontsize=9, ha="center")
+    plt.text(x, y - 1.5, f"{p}", color="red", fontsize=9, ha="center")
 
 plt.xlabel("Wysokość [m]")
 plt.ylabel("Moc odebrana [dBm]")
