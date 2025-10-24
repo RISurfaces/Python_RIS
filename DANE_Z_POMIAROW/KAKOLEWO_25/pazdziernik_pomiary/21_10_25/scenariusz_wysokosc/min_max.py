@@ -8,11 +8,11 @@ from tqdm import tqdm
 # ================================
 
 FILES = [
-    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_wysokosc/10m.csv",
-    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_wysokosc/20m.csv",
-    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_wysokosc/30m.csv",
-    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_wysokosc/40m.csv",
-    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_wysokosc/50m.csv",
+    "10m.csv",
+    "20m.csv",
+    "30m.csv",
+    "40m.csv",
+    "50m.csv",
 ]
 
 
@@ -76,7 +76,7 @@ plt.ylabel("Moc odebrana [dBm]")
 plt.title("Moc minimalna i maksymalna dla różnych wysokości")
 plt.legend()
 plt.grid(True)
-plt.ylim(-100, -30)  # 📏 Równa skala osi Y
+plt.ylim(-100, -50)  # 📏 Równa skala osi Y
 plt.tight_layout()
 
 plt.savefig(OUTPUT_FILE, dpi=300)

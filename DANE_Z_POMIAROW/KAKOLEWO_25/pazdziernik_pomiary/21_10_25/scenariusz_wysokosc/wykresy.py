@@ -9,11 +9,11 @@ from tqdm import tqdm
 
 # Ręcznie zdefiniowana lista plików CSV (możesz dodać lub zmienić)
 FILES = [
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_wysokosc\\10m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_wysokosc\\20m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_wysokosc\\30m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_wysokosc\\40m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_wysokosc\\50m.csv",
+    "10m.csv",
+    "20m.csv",
+    "30m.csv",
+    "40m.csv",
+    "50m.csv",
 ]
 
 # Folder, do którego zapiszą się wykresy
@@ -77,6 +77,7 @@ for pattern in tqdm(sorted(data.keys()), desc="Wykresy", ncols=80):
 
     # Zapis wykresu
     out_path = os.path.join(OUTPUT_DIR, f"pattern_{pattern}.png")
+    plt.ylim(-100, -50)
     plt.tight_layout()
     plt.savefig(out_path, dpi=300)
     plt.close()
