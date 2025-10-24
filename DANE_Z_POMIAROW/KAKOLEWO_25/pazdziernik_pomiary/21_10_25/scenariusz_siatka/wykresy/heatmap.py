@@ -7,7 +7,7 @@ import re
 from tqdm import tqdm
 
 # 🔧 Folder z plikami _avg.csv
-input_dir = r"C:\Users\d0437921\Documents\GitHub\Python_RIS\DANE_Z_POMIAROW\KAKOLEWO_25\pazdziernik_pomiary\21_10_25\scenariusz_siatka\wykresy"
+input_dir = r"DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/wykresy/avg"
 
 # 🔧 Folder na wykresy
 output_dir = os.path.join(input_dir, "heatmaps_final")
@@ -74,7 +74,7 @@ def process_heatmaps(input_dir):
             heatmap_data = np.array(values_list).reshape(grid_size, grid_size)
             heatmap_texts = np.array(texts_list).reshape(grid_size, grid_size)
 
-            # Tworzenie heatmapy
+            # Tworzenie heatmapy z równą skalą kolorów
             plt.figure(figsize=(10, 9))
             sns.heatmap(
                 heatmap_data,
@@ -87,6 +87,8 @@ def process_heatmaps(input_dir):
                 linecolor="gray",
                 xticklabels=[1, 2, 3],
                 yticklabels=[1, 2, 3],
+                vmin=-90,  # 🔹 Minimalna wartość skali
+                vmax=-50,  # 🔹 Maksymalna wartość skali
             )
             plt.title(f"Pattern {pat} - H={height}")
             plt.xlabel("Kolumna PKT")

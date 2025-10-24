@@ -7,7 +7,9 @@ import re
 from tqdm import tqdm
 
 # Folder z plikami CSV
-input_dir = r"C:\Users\d0437921\Documents\GitHub\Python_RIS\DANE_Z_POMIAROW\KAKOLEWO_25\pazdziernik_pomiary\21_10_25\scenariusz_siatka"
+input_dir = (
+    r"DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka"
+)
 
 # Folder na wykresy
 output_dir = os.path.join(input_dir, "wykresy")
@@ -15,24 +17,24 @@ os.makedirs(output_dir, exist_ok=True)
 
 # Lista plików CSV
 file_list = [
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_1_H_8_7m_V_3_5m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_1_H_13_7m_V_1_2m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_2_H_8_7m_V_3m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_2_H_13_7m_V_2_5m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_3_H_8_7m_V_4_2m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_3_H_13_7m_V_3_2m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_4_H_8_7m_V_2m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_4_H_13_7m_V_2m.csv.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_5_H_8_7m_V_3m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_5_H_13_7m_V_1_7m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_6_H_8_7m_V_3m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_6_H_13_7m_V_3_5m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_7_H_8_7m_V_3_5m.csv.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_7_H_13_7m_V_1_9m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_8_H_8_7m_V_3m.csv.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_8_H_13_7m_V_2m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_9_H_8_7m_V_3_5m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_9_H_13_7m_V_3_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_1_H_8_7m_V_3_5m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_1_H_13_7m_V_1_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_2_H_8_7m_V_3m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_2_H_13_7m_V_2_5m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_3_H_8_7m_V_4_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_3_H_13_7m_V_3_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_4_H_8_7m_V_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_4_H_13_7m_V_2m.csv.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_5_H_8_7m_V_3m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_5_H_13_7m_V_1_7m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_6_H_8_7m_V_3m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_6_H_13_7m_V_3_5m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_7_H_8_7m_V_3_5m.csv.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_7_H_13_7m_V_1_9m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_8_H_8_7m_V_3m.csv.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_8_H_13_7m_V_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_9_H_8_7m_V_3_5m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_9_H_13_7m_V_3_2m.csv",
 ]
 
 # Układ punktów w macierzy 3x3
@@ -102,13 +104,15 @@ def process_heatmaps(file_list):
             min_nums,
             annot=min_texts,
             fmt="",
-            cmap="coolwarm",
+            cmap="viridis",
             cbar_kws={"label": "Moc [dBm]"},
             xticklabels=[1, 2, 3],
             yticklabels=[1, 2, 3],
             square=True,
             linewidths=0.5,
             linecolor="gray",
+            vmin=-90,  # 🔹 Minimalna wartość skali
+            vmax=-50,
         )
         plt.title(f"Mapa cieplna (MIN) - {group_name}")
         plt.xlabel("Kolumna PKT")
@@ -126,13 +130,15 @@ def process_heatmaps(file_list):
             max_nums,
             annot=max_texts,
             fmt="",
-            cmap="coolwarm",
+            cmap="viridis",
             cbar_kws={"label": "Moc [dBm]"},
             xticklabels=[1, 2, 3],
             yticklabels=[1, 2, 3],
             square=True,
             linewidths=0.5,
             linecolor="gray",
+            vmin=-90,  # 🔹 Minimalna wartość skali
+            vmax=-50,
         )
         plt.title(f"Mapa cieplna (MAX) - {group_name}")
         plt.xlabel("Kolumna PKT")

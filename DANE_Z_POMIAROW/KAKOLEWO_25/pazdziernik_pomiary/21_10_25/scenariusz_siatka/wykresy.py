@@ -5,24 +5,24 @@ from tqdm import tqdm
 
 # 🔧 Lista plików CSV do przetworzenia
 file_list = [
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_1_H_8_7m_V_3_5m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_1_H_13_7m_V_1_2m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_2_H_8_7m_V_3m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_2_H_13_7m_V_2_5m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_3_H_8_7m_V_4_2m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_3_H_13_7m_V_3_2m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_4_H_8_7m_V_2m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_4_H_13_7m_V_2m.csv.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_5_H_8_7m_V_3m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_5_H_13_7m_V_1_7m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_6_H_8_7m_V_3m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_6_H_13_7m_V_3_5m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_7_H_8_7m_V_3_5m.csv.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_7_H_13_7m_V_1_9m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_8_H_8_7m_V_3m.csv.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_8_H_13_7m_V_2m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_9_H_8_7m_V_3_5m.csv",
-    "C:\\Users\\d0437921\\Documents\\GitHub\\Python_RIS\\DANE_Z_POMIAROW\\KAKOLEWO_25\\pazdziernik_pomiary\\21_10_25\\scenariusz_siatka\\PKT_9_H_13_7m_V_3_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_1_H_8_7m_V_3_5m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_1_H_13_7m_V_1_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_2_H_8_7m_V_3m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_2_H_13_7m_V_2_5m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_3_H_8_7m_V_4_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_3_H_13_7m_V_3_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_4_H_8_7m_V_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_4_H_13_7m_V_2m.csv.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_5_H_8_7m_V_3m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_5_H_13_7m_V_1_7m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_6_H_8_7m_V_3m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_6_H_13_7m_V_3_5m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_7_H_8_7m_V_3_5m.csv.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_7_H_13_7m_V_1_9m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_8_H_8_7m_V_3m.csv.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_8_H_13_7m_V_2m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_9_H_8_7m_V_3_5m.csv",
+    "DANE_Z_POMIAROW/KAKOLEWO_25/pazdziernik_pomiary/21_10_25/scenariusz_siatka/PKT_9_H_13_7m_V_3_2m.csv",
 ]
 
 
@@ -76,6 +76,9 @@ def process_files(file_list):
             plt.title(f"Średnia moc dla każdego patternu\n{base_name}", fontsize=14)
             plt.xlabel("Numer patternu", fontsize=12)
             plt.ylabel("Średnia moc [dBm]", fontsize=12)
+
+            # 🔹 Skala jednakowa dla wszystkich wykresów
+            plt.ylim(-85, -55)
 
             # 🔹 Pokazanie wszystkich numerów patternów na osi X
             plt.xticks(avg_df["pattern"], rotation=90)
