@@ -10,17 +10,23 @@ rcParams.update(
 
 # Lista plików CSV
 file_list = [
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_dookolna.csv",
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112cm_140cm.csv",
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112_90cm.csv",
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_swunica_112_40cm.csv",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_dookolna.csv",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112cm_140cm.csv",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112_90cm.csv",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_swunica_112_40cm.csv",
 ]
 
 # Tytuły subplotów
-subplot_titles = ["TX w P3 (antena dookólna)", "TX w P1", "TX w P2", "TX w P3"]
+# subplot_titles = ["TX w P3 (antena dookólna)", "TX w P1", "TX w P2", "TX w P3"]
+subplot_titles = [
+    "TX in P3 (omnidirectional antenna)",
+    "TX in P1",
+    "TX in P2",
+    "TX in P3",
+]
 
 # Folder zapisu
-output_folder = "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy"
+output_folder = "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/EN"
 os.makedirs(output_folder, exist_ok=True)
 
 # Wczytaj wszystkie dane, żeby wyznaczyć wspólne limity Y
@@ -65,10 +71,10 @@ for idx, (filename, title) in enumerate(zip(file_list, subplot_titles)):
 
     ax = axs[idx // 2][idx % 2]
     scatter_min = ax.scatter(
-        positions, min_power, label="Moc minimalna", color="blue", marker="o"
+        positions, min_power, label="Minimum power", color="blue", marker="o"
     )
     scatter_max = ax.scatter(
-        positions, max_power, label="Moc maksymalna", color="red", marker="o"
+        positions, max_power, label="Maximum power", color="red", marker="o"
     )
 
     # Dodaj tylko raz do wspólnej legendy
@@ -103,8 +109,8 @@ for idx, (filename, title) in enumerate(zip(file_list, subplot_titles)):
         )
 
     ax.set_title(title, fontweight="bold")
-    ax.set_xlabel("Numer pozycji", fontweight="bold")
-    ax.set_ylabel("Moc odebrana [dBm]", fontweight="bold")
+    ax.set_xlabel("Position number", fontweight="bold")
+    ax.set_ylabel("Received power [dBm]", fontweight="bold")
     ax.grid(True)
     ax.set_ylim(y_min - 1, y_max + 1)  # wyrównanie skali z małym marginesem
 
@@ -112,14 +118,14 @@ for idx, (filename, title) in enumerate(zip(file_list, subplot_titles)):
 plt.tight_layout(rect=[0, 0.05, 1, 0.95])
 fig.legend(
     legend_labels,
-    ["Moc minimalna", "Moc maksymalna"],
+    ["Minimum power", "Maximum power"],
     loc="lower center",
     ncol=2,
     fontsize=14,
 )
 
 # Zapis wykresu
-output_path = os.path.join(output_folder, "min_max_wykres_zbiorczy.png")
+output_path = os.path.join(output_folder, "min_max_summary_plot.png")
 plt.savefig(output_path, bbox_inches="tight")
 plt.close()
 

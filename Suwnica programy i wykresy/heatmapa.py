@@ -21,20 +21,20 @@ rcParams.update(
 
 # Lista ścieżek do plików wejściowych
 input_files = [
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_dookolna.csv",
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112_90cm.csv",
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112cm_140cm.csv",
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_swunica_112_40cm.csv",
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_suwnica_bez_skrzynii.csv",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_dookolna.csv",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112_90cm.csv",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_suwnica_112cm_140cm.csv",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_25_swunica_112_40cm.csv",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/DANE_Z_POMIAROW/V2X_INFOCOM2024/suwnica_LAB_28_05_25/28_05_suwnica_bez_skrzynii.csv",
 ]
 
 # Lista folderów wyjściowych
 output_folders = [
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/dookolna",
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/112_90",
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/112_140",
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/112_40",
-    "/Users/pawelplaczkiewicz/Documents/Dokumenty – Mac mini (Paweł)/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/bez_skrzynii",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/EN/dookolna",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/EN/112_90",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/EN/112_140",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/EN/112_40",
+    "/Users/pawelplaczkiewicz/Documents/GitHub/Python_RIS/Suwnica programy i wykresy/wykresy/EN/bez_skrzynii",
 ]
 
 # Ustawienia kolorów
@@ -60,13 +60,16 @@ for input_path, output_folder in zip(input_files, output_folders):
     sns.heatmap(
         pivot, cmap="viridis", vmin=vmin, vmax=vmax, cbar_kws={"label": "Moc [dBm]"}
     )
-    plt.title("Mapa cieplna mocy odebranej w zależności od wzorca i pozycji")
-    plt.xlabel("Numer pozycji")
-    plt.ylabel("Numer wzorca")
+    # plt.title("Mapa cieplna mocy odebranej w zależności od wzorca i pozycji")
+    # plt.xlabel("Numer pozycji")
+    # plt.ylabel("Numer wzorca")
+    plt.title("Heatmap of received power as a function of pattern and position")
+    plt.xlabel("Position number")
+    plt.ylabel("Pattern number")
     plt.tight_layout()
 
     # Zapisz heatmapę
-    heatmap_path = os.path.join(output_folder, "heatmapa_mocy.png")
+    heatmap_path = os.path.join(output_folder, "heatmapa_power.png")
     plt.savefig(heatmap_path, dpi=300)
     plt.close()
 
