@@ -21,6 +21,41 @@ def extract_point_number(file_name):
     match = re.search(r"_(\d+)\.csv$", file_name)
     return int(match.group(1)) if match else None
 
+
+def label_offset_max(y_prev, y_curr, y_next, offset=0.6):
+    """
+    Logika dla MAXIMUM (czerwony) – DZIAŁA, NIE ZMIENIAMY:
+    - lokalne maksimum -> NAD
+    - spadek -> NAD
+    - wzrost -> POD
+    """
+    if y_prev is not None and y_next is not None:
+        if y_curr > y_prev and y_curr > y_next:
+            return offset, "bottom"   # lokalne maksimum
+
+    if y_prev is not None and y_curr < y_prev:
+        return offset, "bottom"       # spadek
+
+    return -offset, "top"             # wzrost
+
+
+def label_offset_min(y_prev, y_curr, y_next, offset=0.6):
+    """
+    Logika dla MINIMUM (niebieski):
+    - lokalne minimum -> POD
+    - dalszy spadek -> POD
+    - odbicie w górę -> NAD
+    """
+    if y_prev is not None and y_next is not None:
+        if y_curr < y_prev and y_curr < y_next:
+            return -offset, "top"     # lokalne minimum
+
+    if y_prev is not None and y_curr < y_prev:
+        return -offset, "top"         # dalszy spadek
+
+    return offset, "bottom"           # odbicie w górę
+
+
 # =========================
 # LOAD DATA
 # =========================
@@ -49,6 +84,7 @@ def load_all_points(input_folder):
 
     return pd.concat(rows, ignore_index=True)
 
+
 # =========================
 # PLOT
 # =========================
@@ -56,11 +92,15 @@ def generate_plot(data, output_folder):
 
     points = sorted(data["Point"].unique())
 
-    # --- MAXIMUM ---
-    maximum = data.groupby("Point")["Power"].max().reindex(points)
+    # --- MAX / MIN (wartości + patterny) ---
+    max_vals = data.loc[data.groupby("Point")["Power"].idxmax()]
+    min_vals = data.loc[data.groupby("Point")["Power"].idxmin()]
 
-    # --- MINIMUM ---
-    minimum = data.groupby("Point")["Power"].min().reindex(points)
+    maximum = max_vals.set_index("Point")["Power"].reindex(points)
+    minimum = min_vals.set_index("Point")["Power"].reindex(points)
+
+    max_patterns = max_vals.set_index("Point")["Pattern"].reindex(points)
+    min_patterns = min_vals.set_index("Point")["Pattern"].reindex(points)
 
     # --- PATTERN 10 ---
     p10 = (
@@ -89,28 +129,70 @@ def generate_plot(data, output_folder):
     plt.plot(points, p10, "o--", color="green", label="Pattern 10", linewidth=2)
     plt.plot(points, p20, "o--", color="black", label="Pattern 20", linewidth=2)
 
+    # =========================
+    # ETYKIETY – MAX (czerwony) i MIN (niebieski)
+    # =========================
+    for i, x in enumerate(points):
+
+        # --- MAXIMUM ---
+        y = maximum.loc[x]
+        p = int(max_patterns.loc[x])
+
+        y_prev = maximum.loc[points[i - 1]] if i > 0 else None
+        y_next = maximum.loc[points[i + 1]] if i < len(points) - 1 else None
+
+        dy, va = label_offset_max(y_prev, y, y_next)
+
+        plt.text(
+            x, y + dy, f"P={p}",
+            color="red", fontsize=10,
+            ha="center", va=va
+        )
+
+        # --- MINIMUM ---
+        y = minimum.loc[x]
+        p = int(min_patterns.loc[x])
+
+        y_prev = minimum.loc[points[i - 1]] if i > 0 else None
+        y_next = minimum.loc[points[i + 1]] if i < len(points) - 1 else None
+
+        dy, va = label_offset_min(y_prev, y, y_next)
+
+        plt.text(
+            x, y + dy, f"P={p}",
+            color="blue", fontsize=10,
+            ha="center", va=va
+        )
+
     plt.xlabel("Measurement Point", fontsize=16)
     plt.ylabel("Received Power [dB]", fontsize=16)
     plt.title("Received Power vs Measurement Point", fontsize=18)
 
     plt.grid(True, linestyle="--", alpha=0.6)
     plt.legend(fontsize=13)
-
     plt.tight_layout()
 
-    out = os.path.join(output_folder, "Power_vs_Point_Max_Min_Pattern10_20.png")
+    out = os.path.join(
+        output_folder,
+        "Power_vs_Point_Max_Min_Pattern10_20_Annotated.png"
+    )
     plt.savefig(out, dpi=300)
     plt.show()
 
     print(f"[OK] Wykres zapisany: {out}")
+
 
 # =========================
 # MAIN
 # =========================
 data = load_all_points(input_folder)
 
-# 🔒 OGRANICZENIE DO 19 PUNKTÓW POMIAROWYCH
-data = data[data["Point"].between(1, 19)]
+# wybieramy pliki 4–22 (19 punktów)
+data = data[data["Point"].between(4, 22)]
+
+# przenumerowanie 4–22 → 1–19
+mapping = {old: new for new, old in enumerate(sorted(data["Point"].unique()), start=1)}
+data["Point"] = data["Point"].map(mapping)
 
 generate_plot(data, output_folder)
 
