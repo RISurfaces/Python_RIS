@@ -14,6 +14,7 @@ PATTERN_20 = 20
 
 os.makedirs(output_folder, exist_ok=True)
 
+
 # =========================
 # HELPERS
 # =========================
@@ -22,38 +23,22 @@ def extract_point_number(file_name):
     return int(match.group(1)) if match else None
 
 
-def label_offset_max(y_prev, y_curr, y_next, offset=0.6):
-    """
-    Logika dla MAXIMUM (czerwony) – DZIAŁA, NIE ZMIENIAMY:
-    - lokalne maksimum -> NAD
-    - spadek -> NAD
-    - wzrost -> POD
-    """
+def label_offset_max(y_prev, y_curr, y_next, offset=0.8):
     if y_prev is not None and y_next is not None:
         if y_curr > y_prev and y_curr > y_next:
-            return offset, "bottom"   # lokalne maksimum
-
+            return offset, "bottom"
     if y_prev is not None and y_curr < y_prev:
-        return offset, "bottom"       # spadek
+        return offset, "bottom"
+    return -offset, "top"
 
-    return -offset, "top"             # wzrost
 
-
-def label_offset_min(y_prev, y_curr, y_next, offset=0.6):
-    """
-    Logika dla MINIMUM (niebieski):
-    - lokalne minimum -> POD
-    - dalszy spadek -> POD
-    - odbicie w górę -> NAD
-    """
+def label_offset_min(y_prev, y_curr, y_next, offset=0.8):
     if y_prev is not None and y_next is not None:
         if y_curr < y_prev and y_curr < y_next:
-            return -offset, "top"     # lokalne minimum
-
+            return -offset, "top"
     if y_prev is not None and y_curr < y_prev:
-        return -offset, "top"         # dalszy spadek
-
-    return offset, "bottom"           # odbicie w górę
+        return -offset, "top"
+    return offset, "bottom"
 
 
 # =========================
@@ -92,7 +77,6 @@ def generate_plot(data, output_folder):
 
     points = sorted(data["Point"].unique())
 
-    # --- MAX / MIN (wartości + patterny) ---
     max_vals = data.loc[data.groupby("Point")["Power"].idxmax()]
     min_vals = data.loc[data.groupby("Point")["Power"].idxmin()]
 
@@ -102,25 +86,14 @@ def generate_plot(data, output_folder):
     max_patterns = max_vals.set_index("Point")["Pattern"].reindex(points)
     min_patterns = min_vals.set_index("Point")["Pattern"].reindex(points)
 
-    # --- PATTERN 10 ---
     p10 = (
-        data[data["Pattern"] == PATTERN_10]
-        .set_index("Point")["Power"]
-        .reindex(points)
+        data[data["Pattern"] == PATTERN_10].set_index("Point")["Power"].reindex(points)
     )
-
-    # --- PATTERN 20 ---
     p20 = (
-        data[data["Pattern"] == PATTERN_20]
-        .set_index("Point")["Power"]
-        .reindex(points)
+        data[data["Pattern"] == PATTERN_20].set_index("Point")["Power"].reindex(points)
     )
 
-    # =========================
-    # PLOT
-    # =========================
     plt.figure(figsize=(14, 7))
-
     plt.xticks(points, fontsize=12)
     plt.yticks(fontsize=12)
 
@@ -129,54 +102,51 @@ def generate_plot(data, output_folder):
     plt.plot(points, p10, "o--", color="green", label="Pattern 10", linewidth=2)
     plt.plot(points, p20, "o--", color="black", label="Pattern 20", linewidth=2)
 
-    # =========================
-    # ETYKIETY – MAX (czerwony) i MIN (niebieski)
-    # =========================
     for i, x in enumerate(points):
 
-        # --- MAXIMUM ---
+        # ===== MAXIMUM =====
         y = maximum.loc[x]
-        p = int(max_patterns.loc[x])
+        pat = int(max_patterns.loc[x])
 
         y_prev = maximum.loc[points[i - 1]] if i > 0 else None
         y_next = maximum.loc[points[i + 1]] if i < len(points) - 1 else None
 
         dy, va = label_offset_max(y_prev, y, y_next)
 
-        plt.text(
-            x, y + dy, f"P={p}",
-            color="red", fontsize=10,
-            ha="center", va=va
-        )
+        plt.text(x, y + dy, f"{pat}", color="red", fontsize=10, ha="center", va=va)
 
-        # --- MINIMUM ---
+        # ===== MINIMUM =====
         y = minimum.loc[x]
-        p = int(min_patterns.loc[x])
+        pat = int(min_patterns.loc[x])
 
-        y_prev = minimum.loc[points[i - 1]] if i > 0 else None
-        y_next = minimum.loc[points[i + 1]] if i < len(points) - 1 else None
+        # 🔧 PROSTE, JASNE PRZESUNIĘCIA
+        if x == 4:
+            dy, va = -1.2, "top"
+        elif x == 10:
+            dy, va = -2.0, "top"
+        elif x == 14:
+            dy, va = 1.2, "bottom"
+        else:
+            y_prev = minimum.loc[points[i - 1]] if i > 0 else None
+            y_next = minimum.loc[points[i + 1]] if i < len(points) - 1 else None
+            dy, va = label_offset_min(y_prev, y, y_next)
 
-        dy, va = label_offset_min(y_prev, y, y_next)
-
-        plt.text(
-            x, y + dy, f"P={p}",
-            color="blue", fontsize=10,
-            ha="center", va=va
-        )
+        plt.text(x, y + dy, f"{pat}", color="blue", fontsize=10, ha="center", va=va)
 
     plt.xlabel("Measurement Point", fontsize=16)
     plt.ylabel("Received Power [dB]", fontsize=16)
     plt.title("Received Power vs Measurement Point", fontsize=18)
 
     plt.grid(True, linestyle="--", alpha=0.6)
-    plt.legend(fontsize=13)
+
+    plt.legend(fontsize=13, loc="upper left", bbox_to_anchor=(1.02, 1))
+
     plt.tight_layout()
 
     out = os.path.join(
-        output_folder,
-        "Power_vs_Point_Max_Min_Pattern10_20_Annotated.png"
+        output_folder, "Power_vs_Point_Max_Min_Pattern10_20_Annotated.png"
     )
-    plt.savefig(out, dpi=300)
+    plt.savefig(out, dpi=300, bbox_inches="tight")
     plt.show()
 
     print(f"[OK] Wykres zapisany: {out}")
@@ -187,13 +157,9 @@ def generate_plot(data, output_folder):
 # =========================
 data = load_all_points(input_folder)
 
-# wybieramy pliki 4–22 (19 punktów)
 data = data[data["Point"].between(4, 22)]
-
-# przenumerowanie 4–22 → 1–19
 mapping = {old: new for new, old in enumerate(sorted(data["Point"].unique()), start=1)}
 data["Point"] = data["Point"].map(mapping)
 
 generate_plot(data, output_folder)
-
 print("Zakończono.")
