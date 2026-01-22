@@ -7,7 +7,7 @@ import csv
 def maximum_val(file_path):
     power_values = []
     # Patterny, które sprawdzamy
-    filter_values = {23,26}
+    filter_values = {23, 26}
 
     with open(file_path, mode="r") as file:
         reader = csv.reader(file, delimiter=";")
@@ -29,7 +29,7 @@ def maximum_val(file_path):
 
 def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
     plt.rcParams["font.family"] = "Times New Roman"
-    
+
     df = pd.read_csv(
         file,
         sep=";",
@@ -57,19 +57,21 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
             fmt=".2g",
         )
         cbar = ax.collections[0].colorbar
-        cbar.ax.yaxis.set_tick_params(labelsize=14)  
+        cbar.ax.yaxis.set_tick_params(labelsize=14)
         cbar.ax.yaxis.label.set_size(18)
         cbar.ax.yaxis.label.set_weight("bold")
         ax.invert_yaxis()
 
-
         # Pogrubione tytuły i etykiety
-        plt.title(f"Heatmap for pattern 6 on 1m - anechoic chamber", fontsize=22, fontweight="bold")
+        plt.title(
+            f"Heatmap for pattern 6 on 1m - anechoic chamber",
+            fontsize=22,
+            fontweight="bold",
+        )
         plt.xlabel("Azimuth angle [°]", fontsize=18, fontweight="bold")
         plt.ylabel("Elevation angle [°]", fontsize=18, fontweight="bold")
         plt.xticks(fontsize=14, fontweight="bold")
         plt.yticks(fontsize=14, fontweight="bold")
-        
 
         # plt.savefig(
         #     f"heatmap_pattern_{pattern}_dist_{distance}m_.jpg",
@@ -80,7 +82,7 @@ def plot_multiple_patterns_from_csv(file, patterns, horizontal_range=(45, 135)):
         plt.close()
 
 
-file_path = r"C:\Users\brzak\Documents\GIT_Repository\Python_RIS\DANE_Z_POMIAROW\ComCom_IEEEAccess\charakterystyka_3D_nowe_anteny_AINFO\28_10_3D_5_5Ghz_1m_new_ant.csv"
-#patterns = [23] #pattern 5
-patterns = [26] #pattern 6
+file_path = r"C:\Users\d0437922\Python_RIS\DANE_Z_POMIAROW\ComCom_IEEEAccess\charakterystyka_3D_nowe_anteny_AINFO\27_10_3D_5_5Ghz_2m_new_ant.csv"
+# patterns = [23] #pattern 5 [(20, 2), (17, 3)]  # (20, 2), (1, 1), (17, 3), (8, 4), (23, 5), (27, 6)
+patterns = [26]  # pattern 6
 plot_multiple_patterns_from_csv(file_path, patterns)
