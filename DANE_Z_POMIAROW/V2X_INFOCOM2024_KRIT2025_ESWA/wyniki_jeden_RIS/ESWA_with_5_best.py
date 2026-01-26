@@ -217,7 +217,7 @@ plt.legend(fontsize=16, loc="upper left", bbox_to_anchor=(1.02, 1))
 plt.tight_layout()
 
 out = os.path.join(
-    output_folder, f"Power_vs_Point_Max_vs_Top{TOP_K_1}_vs_Top{TOP_K_2}.png"
+    output_folder, f"Max_vs_{TOP_K_1}_vs_Top_{TOP_K_2}.png"
 )
 plt.savefig(out, dpi=300, bbox_inches="tight")
 plt.show()
