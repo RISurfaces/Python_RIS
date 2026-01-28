@@ -14,6 +14,7 @@ PATTERN_20 = 20
 
 os.makedirs(output_folder, exist_ok=True)
 
+
 # =========================
 # HELPERS
 # =========================
@@ -85,27 +86,53 @@ def generate_plot(data, output_folder):
     max_patterns = max_vals.set_index("Point")["Pattern"].reindex(points)
     min_patterns = min_vals.set_index("Point")["Pattern"].reindex(points)
 
-    p10 = data[data["Pattern"] == PATTERN_10].set_index("Point")["Power"].reindex(points)
-    p20 = data[data["Pattern"] == PATTERN_20].set_index("Point")["Power"].reindex(points)
+    p10 = (
+        data[data["Pattern"] == PATTERN_10].set_index("Point")["Power"].reindex(points)
+    )
+    p20 = (
+        data[data["Pattern"] == PATTERN_20].set_index("Point")["Power"].reindex(points)
+    )
 
     plt.figure(figsize=(15, 8))
 
     # ===== osie =====
-    plt.xticks(points, fontsize=15)
-    plt.yticks(fontsize=15)
+    plt.xticks(points, fontsize=16)
+    plt.yticks(fontsize=16)
 
     # ===== krzywe =====
-    plt.plot(points, maximum, "o-", color="red",
-             label="Maximum", linewidth=3, markersize=7)
+    plt.plot(
+        points, maximum, "o-", color="red", label="Maximum", linewidth=2.5, markersize=7
+    )
 
-    plt.plot(points, minimum, "o-", color="blue",
-             label="Minimum", linewidth=3, markersize=7)
+    plt.plot(
+        points,
+        minimum,
+        "o-",
+        color="blue",
+        label="Minimum",
+        linewidth=2.5,
+        markersize=7,
+    )
 
-    plt.plot(points, p10, "o--", color="green",
-             label="Pattern 10", linewidth=3, markersize=7)
+    plt.plot(
+        points,
+        p10,
+        "o--",
+        color="green",
+        label="Pattern 10",
+        linewidth=2.5,
+        markersize=7,
+    )
 
-    plt.plot(points, p20, "o--", color="black",
-             label="Pattern 20", linewidth=3, markersize=7)
+    plt.plot(
+        points,
+        p20,
+        "o--",
+        color="black",
+        label="Pattern 20",
+        linewidth=2.5,
+        markersize=7,
+    )
 
     # ===== etykiety przy punktach =====
     for i, x in enumerate(points):
@@ -119,11 +146,7 @@ def generate_plot(data, output_folder):
 
         dy, va = label_offset_max(y_prev, y, y_next)
 
-        plt.text(
-            x, y + dy, f"{pat}",
-            color="red", fontsize=13,
-            ha="center", va=va
-        )
+        plt.text(x, y + dy, f"{pat}", color="red", fontsize=13, ha="center", va=va)
 
         # --- MIN ---
         y = minimum.loc[x]
@@ -140,11 +163,7 @@ def generate_plot(data, output_folder):
             y_next = minimum.loc[points[i + 1]] if i < len(points) - 1 else None
             dy, va = label_offset_min(y_prev, y, y_next)
 
-        plt.text(
-            x, y + dy, f"{pat}",
-            color="blue", fontsize=13,
-            ha="center", va=va
-        )
+        plt.text(x, y + dy, f"{pat}", color="blue", fontsize=13, ha="center", va=va)
 
     # ===== opisy =====
     plt.xlabel("Measurement Point", fontsize=20)
@@ -154,21 +173,12 @@ def generate_plot(data, output_folder):
     plt.grid(True, linestyle="--", alpha=0.6)
 
     # ===== legenda =====
-    legend = plt.legend(
-        fontsize=16,
-        loc="upper left",
-        bbox_to_anchor=(1.02, 1),
-        frameon=True
-    )
+    plt.legend(fontsize=16, loc="upper left", bbox_to_anchor=(1.02, 1))
 
-    for line in legend.get_lines():
-        line.set_linewidth(3)
-
-    plt.tight_layout()
+    plt.subplots_adjust(right=0.82)
 
     out = os.path.join(
-        output_folder,
-        "Power_vs_Point_Max_Min_Pattern10_20_BIGFONTS.png"
+        output_folder, "Power_vs_Point_Max_Min_Pattern10_20_BIGFONTS.png"
     )
     plt.savefig(out, dpi=300, bbox_inches="tight")
     plt.show()

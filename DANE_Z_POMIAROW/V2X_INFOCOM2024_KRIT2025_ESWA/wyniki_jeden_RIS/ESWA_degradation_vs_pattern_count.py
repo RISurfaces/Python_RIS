@@ -111,7 +111,7 @@ for k in k_values:
 # =========================
 # PLOT (styl jak na obrazku)
 # =========================
-plt.figure(figsize=(10, 7))
+plt.figure(figsize=(12, 8))
 
 plt.plot(
     k_values,
@@ -127,13 +127,13 @@ plt.plot(
 
 # Oś X odwrócona (od max do 0)
 plt.xlim(total_patterns + 1, 0)
-plt.xticks(fontsize=14)
-plt.yticks(fontsize=14)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
 
 # Etykiety
-plt.xlabel("Pattern count", fontsize=18)
-plt.ylabel("Degradation [dB]", fontsize=18)
-plt.title("Degradation vs. pattern count", fontsize=20)
+plt.xlabel("Pattern count", fontsize=20)
+plt.ylabel("Degradation [dB]", fontsize=20)
+plt.title("Degradation vs. pattern count", fontsize=22)
 
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.tight_layout()

@@ -105,7 +105,7 @@ print(f"TOP-{TOP_K_2} patterns: {top_patterns_2}")
 # =========================
 # PLOT
 # =========================
-plt.figure(figsize=(16, 8))
+plt.figure(figsize=(15, 8))
 plt.xticks(points, fontsize=16)
 plt.yticks(fontsize=16)
 
@@ -115,9 +115,9 @@ plt.plot(
     global_max,
     "o-",
     color="red",
-    linewidth=3,
-    markersize=8,
-    label="Maximum (27 patterns)",
+    linewidth=2.5,
+    markersize=7,
+    label="Maximum",
 )
 
 # Best of TOP-K_2 (większy set)
@@ -126,9 +126,9 @@ plt.plot(
     best_of_topk2,
     "s--",
     color="blue",
-    linewidth=3,
-    markersize=8,
-    label=f"Best of TOP-{TOP_K_2} avg patterns",
+    linewidth=2.5,
+    markersize=7,
+    label=f"Best of TOP-{TOP_K_2}",
 )
 
 # Best of TOP-K_1 (mniejszy set)
@@ -137,9 +137,9 @@ plt.plot(
     best_of_topk1,
     "^:",
     color="green",
-    linewidth=3,
-    markersize=8,
-    label=f"Best of TOP-{TOP_K_1} avg patterns",
+    linewidth=2.5,
+    markersize=7,
+    label=f"Best of TOP-{TOP_K_1}",
 )
 
 # =========================
@@ -206,19 +206,16 @@ plt.ylim(y_min - y_margin, y_max + y_margin)
 plt.xlabel("Measurement Point", fontsize=20)
 plt.ylabel("Received Power [dB]", fontsize=20)
 plt.title(
-    f"Received Power vs Measurement Point\n"
-    f"Global Maximum vs Best of TOP-{TOP_K_1} vs TOP-{TOP_K_2} Average Patterns",
+    f"Received Power vs Measurement Point",
     fontsize=22,
 )
 
 plt.grid(True, linestyle="--", alpha=0.6)
 plt.legend(fontsize=16, loc="upper left", bbox_to_anchor=(1.02, 1))
 
-plt.tight_layout()
+plt.subplots_adjust(right=0.82)
 
-out = os.path.join(
-    output_folder, f"Max_vs_{TOP_K_1}_vs_Top_{TOP_K_2}.png"
-)
+out = os.path.join(output_folder, f"Max_vs_{TOP_K_1}_vs_Top_{TOP_K_2}.png")
 plt.savefig(out, dpi=300, bbox_inches="tight")
 plt.show()
 
