@@ -170,12 +170,15 @@ def generate_plot(data, output_folder):
     plt.ylabel("Received Power [dB]", fontsize=20)
     plt.title("Received Power vs Measurement Point", fontsize=22)
 
+    # ===== limity osi Y (od -35 dB) =====
+    plt.ylim(-90, -35)
+
     plt.grid(True, linestyle="--", alpha=0.6)
 
-    # ===== legenda =====
-    plt.legend(fontsize=16, loc="upper left", bbox_to_anchor=(1.02, 1))
+    # ===== legenda wewnątrz wykresu =====
+    plt.legend(fontsize=14, loc="upper right")
 
-    plt.subplots_adjust(right=0.82)
+    plt.tight_layout()
 
     out = os.path.join(
         output_folder, "Power_vs_Point_Max_Min_Pattern10_20_BIGFONTS.png"

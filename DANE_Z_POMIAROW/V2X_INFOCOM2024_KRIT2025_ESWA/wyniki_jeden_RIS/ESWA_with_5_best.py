@@ -211,9 +211,9 @@ plt.title(
 )
 
 plt.grid(True, linestyle="--", alpha=0.6)
-plt.legend(fontsize=16, loc="upper left", bbox_to_anchor=(1.02, 1))
+plt.legend(fontsize=14, loc="upper right")
 
-plt.subplots_adjust(right=0.82)
+plt.tight_layout()
 
 out = os.path.join(output_folder, f"Max_vs_{TOP_K_1}_vs_Top_{TOP_K_2}.png")
 plt.savefig(out, dpi=300, bbox_inches="tight")
