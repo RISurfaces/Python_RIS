@@ -1,9 +1,9 @@
 """
 =============================================================================
-ESWA - Complete RIS Performance Analysis (4 Figures)
+ESWA - Complete RIS Performance Analysis (6 Figures)
 =============================================================================
 
-Script generates 4 figures for ESWA publication:
+Script generates 6 figures for ESWA publication:
 
 FIGURE 1: Scenario A - Basic Pattern Comparison
     Comparison of received power for:
@@ -19,16 +19,28 @@ FIGURE 2: TOP-K by Average Selection
     - Best of TOP-10 avg patterns (TOP-10 by average power)
     Simple method: rank patterns by average → select K best.
 
-FIGURE 3: Degradation vs Pattern Count
+FIGURE 3: Degradation vs Pattern Count (Brute-Force)
     Performance degradation as a function of pattern count (N = 1..27).
     For each N, the optimal set maximizing total RSRP across all points
     is found via brute-force search.
 
-FIGURE 4: Optimal K Patterns Degradation
+FIGURE 4: Degradation vs Pattern Count (Greedy Heuristic)
+    Performance degradation as a function of pattern count (N = 1..27).
+    Uses greedy backward elimination heuristic: iteratively removes
+    the pattern whose removal causes the smallest degradation in
+    average best-case power (AvgBestCase). Ties broken randomly.
+
+FIGURE 5: Optimal K Patterns Degradation
     Shows power degradation for optimal K-pattern sets:
     - Maximum (all 27 patterns)
     - Optimal K patterns for K ∈ {8, 5, 4, 3, 2, 1}
     K=8 is minimum without degradation, others show increasing degradation.
+
+FIGURE 6: Degradation Comparison (Brute-Force vs Greedy)
+    Direct comparison of both methods on the same plot:
+    - Brute-force optimal (blue)
+    - Greedy heuristic (orange)
+    Shows how close the greedy heuristic approximates the optimal solution.
 
 =============================================================================
 Author: Marcel
@@ -39,6 +51,7 @@ Date: 2026-02-02
 import os
 import re
 import json
+import random
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -600,7 +613,13 @@ def generate_figure3(rsrp_matrix, all_patterns, baseline_sum, output_folder):
 
     plt.xlim(total_patterns + 1, 0)
     plt.xticks(fontsize=16)
-    plt.yticks(fontsize=16)
+    
+    # Set Y-axis ticks every 1 dB
+    y_min = min(degradations)
+    y_max = max(degradations)
+    y_ticks = np.arange(np.floor(y_min), np.ceil(y_max) + 1, 1.0)
+    plt.yticks(y_ticks, fontsize=16)
+    
     plt.xlabel("Pattern count", fontsize=20)
     plt.ylabel("Degradation [dB]", fontsize=20)
     plt.title("Degradation vs Pattern Count", fontsize=22)
@@ -616,15 +635,269 @@ def generate_figure3(rsrp_matrix, all_patterns, baseline_sum, output_folder):
 
 
 # =============================================================================
-# FIGURE 4: OPTIMAL K PATTERNS DEGRADATION
+# FIGURE 4: DEGRADATION VS PATTERN COUNT (GREEDY HEURISTIC)
 # =============================================================================
-def generate_figure4(data, rsrp_matrix, all_patterns, output_folder):
+def avg_best_case(rsrp_matrix, pattern_indices):
+    """
+    Computes the average best-case power J̄(S) for a given pattern subset.
+    J̄(S) = (1/(K+1)) * Σ_{i=0}^{K} max_{a∈S} RSRP_i(a)
+
+    Args:
+        rsrp_matrix: Full RSRP matrix (n_patterns x n_points)
+        pattern_indices: List/array of pattern indices currently in S
+
+    Returns:
+        Average best-case power (float)
+    """
+    n_points = rsrp_matrix.shape[1]
+    total = 0.0
+    for pt in range(n_points):
+        max_val = -np.inf
+        for idx in pattern_indices:
+            if rsrp_matrix[idx, pt] > max_val:
+                max_val = rsrp_matrix[idx, pt]
+        total += max_val
+    return total / n_points
+
+
+def greedy_heuristic_reduction(rsrp_matrix, target_n):
+    """
+    Greedy backward elimination heuristic for RIS pattern set reduction
+    (Algorithm 1 from the paper).
+
+    Starting from the full pattern set S = {0, ..., M-1}, iteratively
+    removes the pattern whose removal causes the smallest decrease in
+    AvgBestCase(S). Ties are broken uniformly at random.
+
+    Args:
+        rsrp_matrix: RSRP matrix (n_patterns x n_points)
+        target_n: Target subset size N
+
+    Returns:
+        history: list of dicts with keys 'S' (pattern set), 'avg_best' (J̄),
+                 'removed' (pattern removed at this step, None for initial)
+    """
+    n_patterns = rsrp_matrix.shape[0]
+    S = list(range(n_patterns))  # S ← {1, ..., M}
+    history = []
+
+    # Record initial state
+    j_initial = avg_best_case(rsrp_matrix, S)
+    history.append({"S": list(S), "avg_best": j_initial, "removed": None})
+
+    while len(S) > target_n:
+        j_cur = avg_best_case(rsrp_matrix, S)  # Line 9
+        delta_min = np.inf  # Line 10
+        candidates = []  # C ← ∅
+
+        for a in S:  # Line 11
+            S_minus_a = [x for x in S if x != a]
+            j_rem = avg_best_case(rsrp_matrix, S_minus_a)  # Line 12
+            delta = j_cur - j_rem  # Line 13
+
+            if delta < delta_min:  # Line 14
+                delta_min = delta  # Line 15
+                candidates = [a]  # Line 16: C ← {a}
+            elif delta == delta_min:  # Line 17
+                candidates.append(a)  # Line 18: C ← C ∪ {a}
+
+        # Select a* uniformly at random from C (Line 21)
+        a_star = random.choice(candidates)
+        S.remove(a_star)  # Line 22: S ← S \ {a*}
+
+        j_new = avg_best_case(rsrp_matrix, S)
+        history.append({"S": list(S), "avg_best": j_new, "removed": a_star})
+
+    return history
+
+
+def generate_figure4(rsrp_matrix, all_patterns, baseline_sum, output_folder):
+    """
+    Plot of degradation as a function of pattern count (N = 1..M)
+    using the greedy backward elimination heuristic.
+    """
+    print("\n" + "=" * 70)
+    print("FIGURE 4: DEGRADATION VS PATTERN COUNT (GREEDY HEURISTIC)")
+    print("=" * 70)
+
+    total_patterns = len(all_patterns)
+    n_points = rsrp_matrix.shape[1]
+    baseline_avg = baseline_sum / n_points
+
+    # Run greedy heuristic down to N=1
+    print(f"Running greedy heuristic from {total_patterns} down to 1 pattern...")
+    history = greedy_heuristic_reduction(rsrp_matrix, target_n=1)
+
+    # Build degradation curve: for each N from 1..total_patterns
+    # history[0] = full set (N=total_patterns), history[-1] = 1 pattern
+    k_values = []
+    degradations = []
+    greedy_sets = []
+
+    for entry in history:
+        n = len(entry["S"])
+        deg = entry["avg_best"] - baseline_avg  # Will be <= 0
+        k_values.append(n)
+        degradations.append(deg)
+        greedy_sets.append([all_patterns[i] for i in entry["S"]])
+
+    # Reverse so k_values goes from 1 to total_patterns
+    k_values = k_values[::-1]
+    degradations = degradations[::-1]
+    greedy_sets = greedy_sets[::-1]
+
+    # Save greedy results to JSON
+    greedy_json = os.path.join(output_folder, "degradation_greedy_results.json")
+    greedy_results = {
+        "method": "greedy_heuristic",
+        "total_patterns": int(total_patterns),
+        "n_points": int(n_points),
+        "baseline_avg": float(baseline_avg),
+        "k_values": [int(k) for k in k_values],
+        "degradations": [float(d) for d in degradations],
+        "greedy_sets": [[int(p) for p in s] for s in greedy_sets],
+    }
+    with open(greedy_json, "w", encoding="utf-8") as f:
+        json.dump(greedy_results, f, indent=2, ensure_ascii=False)
+    print(f"[✓] Greedy results saved: {greedy_json}")
+
+    # Print removal order
+    print("\n  Removal order (greedy):")
+    for entry in history[1:]:
+        removed_pattern = all_patterns[entry["removed"]]
+        n_remaining = len(entry["S"])
+        deg = entry["avg_best"] - baseline_avg
+        print(f"    Removed pattern {removed_pattern:2d} → {n_remaining} remaining, degradation: {deg:.3f} dB")
+
+    # Plot
+    plt.figure(figsize=(12, 8))
+    plt.plot(
+        k_values,
+        degradations,
+        "s--",
+        color="darkorange",
+        linewidth=2.5,
+        markersize=8,
+        markerfacecolor="white",
+        markeredgecolor="darkorange",
+        markeredgewidth=2,
+        label="Greedy heuristic",
+    )
+
+    plt.xlim(total_patterns + 1, 0)
+    plt.xticks(fontsize=16)
+    
+    # Set Y-axis ticks every 1 dB
+    y_min = min(degradations)
+    y_max = max(degradations)
+    y_ticks = np.arange(np.floor(y_min), np.ceil(y_max) + 1, 1.0)
+    plt.yticks(y_ticks, fontsize=16)
+    
+    plt.xlabel("Pattern count", fontsize=20)
+    plt.ylabel("Degradation [dB]", fontsize=20)
+    plt.title("Degradation vs Pattern Count (Greedy Heuristic)", fontsize=22)
+    plt.grid(True, linestyle="--", alpha=0.6)
+    plt.legend(fontsize=16, loc="lower left")
+    plt.tight_layout()
+
+    out = os.path.join(output_folder, "Figure4_Degradation_Greedy.png")
+    plt.savefig(out, dpi=300, bbox_inches="tight")
+    plt.close()
+    print(f"[✓] Figure 4 saved: {out}")
+
+    return k_values, degradations, greedy_sets
+
+
+# =============================================================================
+# FIGURE 6: DEGRADATION COMPARISON (BRUTE-FORCE VS GREEDY)
+# =============================================================================
+def generate_figure6(
+    k_values_bf, degradations_bf, k_values_greedy, degradations_greedy, output_folder
+):
+    """
+    Plot comparing brute-force and greedy heuristic on the same graph.
+    """
+    print("\n" + "=" * 70)
+    print("FIGURE 6: DEGRADATION COMPARISON (BRUTE-FORCE VS GREEDY)")
+    print("=" * 70)
+
+    plt.figure(figsize=(12, 8))
+
+    # Brute-force curve
+    plt.plot(
+        k_values_bf,
+        degradations_bf,
+        "o--",
+        color="steelblue",
+        linewidth=2.5,
+        markersize=8,
+        markerfacecolor="white",
+        markeredgecolor="steelblue",
+        markeredgewidth=2,
+        label="Brute-force (optimal)",
+    )
+
+    # Greedy heuristic curve
+    plt.plot(
+        k_values_greedy,
+        degradations_greedy,
+        "s--",
+        color="darkorange",
+        linewidth=2.5,
+        markersize=8,
+        markerfacecolor="white",
+        markeredgecolor="darkorange",
+        markeredgewidth=2,
+        label="Greedy heuristic",
+    )
+
+    total_patterns = max(k_values_bf)
+    plt.xlim(total_patterns + 1, 0)
+    plt.xticks(fontsize=16)
+
+    # Set Y-axis ticks every 1 dB
+    all_degs = degradations_bf + degradations_greedy
+    y_min = min(all_degs)
+    y_max = max(all_degs)
+    y_ticks = np.arange(np.floor(y_min), np.ceil(y_max) + 1, 1.0)
+    plt.yticks(y_ticks, fontsize=16)
+
+    plt.xlabel("Pattern count", fontsize=20)
+    plt.ylabel("Degradation [dB]", fontsize=20)
+    plt.title("Degradation vs Pattern Count: Brute-Force vs Greedy", fontsize=22)
+    plt.grid(True, linestyle="--", alpha=0.6)
+    plt.legend(fontsize=16, loc="lower left")
+    plt.tight_layout()
+
+    out = os.path.join(output_folder, "Figure6_Degradation_Comparison.png")
+    plt.savefig(out, dpi=300, bbox_inches="tight")
+    plt.close()
+    print(f"[✓] Figure 6 saved: {out}")
+
+    # Calculate and print differences
+    print("\n  Comparison summary:")
+    for k in [1, 5, 10, 15, 20, 27]:
+        if k in k_values_bf and k in k_values_greedy:
+            idx_bf = k_values_bf.index(k)
+            idx_greedy = k_values_greedy.index(k)
+            deg_bf = degradations_bf[idx_bf]
+            deg_greedy = degradations_greedy[idx_greedy]
+            diff = deg_greedy - deg_bf
+            print(
+                f"    K={k:2d}: BF={deg_bf:6.3f} dB, Greedy={deg_greedy:6.3f} dB, diff={diff:6.3f} dB"
+            )
+
+
+# =============================================================================
+# FIGURE 5: OPTIMAL K PATTERNS DEGRADATION
+# =============================================================================
+def generate_figure5(data, rsrp_matrix, all_patterns, output_folder):
     """
     Plot showing power for optimal K-pattern sets.
     K = 8 (minimum bez degradacji), 5, 4, 3, 2, 1
     """
     print("\n" + "=" * 70)
-    print("FIGURE 4: OPTIMAL K PATTERNS DEGRADATION")
+    print("FIGURE 5: OPTIMAL K PATTERNS DEGRADATION")
     print("=" * 70)
 
     K_VALUES = [8, 5, 4, 3, 2, 1]
@@ -640,7 +913,7 @@ def generate_figure4(data, rsrp_matrix, all_patterns, output_folder):
 
     # Compute optimal sets for different K values
     results = {}
-    for k in tqdm(K_VALUES, desc="Computing optimal K-sets for Fig 4"):
+    for k in tqdm(K_VALUES, desc="Computing optimal K-sets for Fig 5"):
         best_sum, best_combo = find_best_combo(rsrp_matrix, total_patterns, k)
         best_patterns = [all_patterns[i] for i in best_combo]
 
@@ -685,6 +958,7 @@ def generate_figure4(data, rsrp_matrix, all_patterns, output_folder):
     # Curves for different K values
     for k in K_VALUES:
         power = results[k]["power"]
+        label_text = "Maximum (8 patterns)" if k == 8 else f"Optimal {k} patterns"
         plt.plot(
             points,
             power,
@@ -693,7 +967,7 @@ def generate_figure4(data, rsrp_matrix, all_patterns, output_folder):
             color=colors[k],
             linewidth=2.5,
             markersize=7,
-            label=f"Optimal {k} patterns",
+            label=label_text,
             zorder=5,
         )
 
@@ -718,17 +992,17 @@ def generate_figure4(data, rsrp_matrix, all_patterns, output_folder):
     plt.xlabel("Measurement Point", fontsize=20)
     plt.ylabel("Received Power [dB]", fontsize=20)
     plt.title(
-        f"Received Power: Maximum vs Optimal K Patterns (K = 8, 5, 4, 3, 2, 1)",
+        f"Received Power: Maximum vs Optimal K Patterns (K = 5, 4, 3, 2, 1)",
         fontsize=22,
     )
     plt.grid(True, linestyle="--", alpha=0.6)
     plt.legend(fontsize=14, loc="upper right", ncol=2)
     plt.tight_layout()
 
-    out = os.path.join(output_folder, "Figure4_Optimal_K_Degradation.png")
+    out = os.path.join(output_folder, "Figure5_Optimal_K_Degradation.png")
     plt.savefig(out, dpi=300, bbox_inches="tight")
     plt.close()
-    print(f"[✓] Figure 4 saved: {out}")
+    print(f"[✓] Figure 5 saved: {out}")
 
     # Summary
     print("\n  Degradation summary:")
@@ -743,7 +1017,7 @@ def generate_figure4(data, rsrp_matrix, all_patterns, output_folder):
 def main():
     print("\n" + "=" * 70)
     print("ESWA - COMPLETE RIS PERFORMANCE ANALYSIS")
-    print("Generating 4 figures for publication")
+    print("Generating 6 figures for publication")
     print("=" * 70)
 
     # Load data
@@ -780,13 +1054,17 @@ def main():
         baseline_sum += np.max(rsrp_matrix[:, pt_idx])
 
     # Generate figures
-    print("\n[3/5] Generating figures...")
+    print("\n[3/7] Generating figures...")
     generate_figure1(data, OUTPUT_FOLDER)
     generate_figure2(data, all_patterns, OUTPUT_FOLDER)
     k_values, degradations, best_sets = generate_figure3(
         rsrp_matrix, all_patterns, baseline_sum, OUTPUT_FOLDER
     )
-    generate_figure4(data, rsrp_matrix, all_patterns, OUTPUT_FOLDER)
+    k_values_g, degradations_g, greedy_sets = generate_figure4(
+        rsrp_matrix, all_patterns, baseline_sum, OUTPUT_FOLDER
+    )
+    generate_figure5(data, rsrp_matrix, all_patterns, OUTPUT_FOLDER)
+    generate_figure6(k_values, degradations, k_values_g, degradations_g, OUTPUT_FOLDER)
 
     print("\n" + "=" * 70)
     print("✓ ALL FIGURES GENERATED SUCCESSFULLY")
@@ -796,8 +1074,11 @@ def main():
     print("  - Figure1_Scenario_A.png")
     print("  - Figure2_TopK_Average.png")
     print("  - Figure3_Degradation_vs_Count.png")
-    print("  - Figure4_Optimal_K_Degradation.png")
+    print("  - Figure4_Degradation_Greedy.png")
+    print("  - Figure5_Optimal_K_Degradation.png")
+    print("  - Figure6_Degradation_Comparison.png")
     print("  - degradation_results.json")
+    print("  - degradation_greedy_results.json")
 
 
 if __name__ == "__main__":
