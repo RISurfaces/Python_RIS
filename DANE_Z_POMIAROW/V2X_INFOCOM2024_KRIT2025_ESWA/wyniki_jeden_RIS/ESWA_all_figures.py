@@ -662,7 +662,7 @@ def avg_best_case(rsrp_matrix, pattern_indices):
 
 def greedy_heuristic_reduction(rsrp_matrix, target_n):
     """
-    Greedy backward elimination heuristic for RIS pattern set reduction
+    Greeedy backward elimination heuristic for RIS pattern set reduction
     (Algorithm 1 from the paper).
 
     Starting from the full pattern set S = {0, ..., M-1}, iteratively
