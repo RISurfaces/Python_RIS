@@ -992,7 +992,7 @@ def generate_figure5(data, rsrp_matrix, all_patterns, output_folder):
     plt.xlabel("Measurement Point", fontsize=20)
     plt.ylabel("Received Power [dB]", fontsize=20)
     plt.title(
-        f"Received Power: Maximum vs Optimal K Patterns (K = 5, 4, 3, 2, 1)",
+        f"Received Power: Maximum vs Optimal S Patterns (S = 5, 4, 3, 2, 1)",
         fontsize=22,
     )
     plt.grid(True, linestyle="--", alpha=0.6)
