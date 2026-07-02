@@ -14,11 +14,16 @@ CSV_COLUMNS = ["measurement", "pattern", "frequency", "power"]
 HEIGHTS = [8.7, 13.7]
 POINTS = np.arange(1, 10)
 HEIGHT_COLORS = {8.7: "#1f77b4", 13.7: "#ff7f0e"}
+TITLE_FONTSIZE = 18
+AXIS_LABEL_FONTSIZE = 16
+TICK_LABEL_FONTSIZE = 14
+LEGEND_FONTSIZE = 11.5
+ANNOTATION_FONTSIZE = 7.8
 
 LANGUAGE_TEXT = {
     "EN": {
-        "distribution_title": "(a) Distribution of pattern-averaged power",
-        "best_title": "(b) Best RIS pattern at each receiver point",
+        "distribution_title": "(a) Distribution of\npattern-averaged power",
+        "best_title": "(b) Best RIS pattern at\neach receiver point",
         "x_label": "Receiver point (PT)",
         "y_label": "Received power [dBm]",
         "height_label": "H = {height:.1f} m",
@@ -26,8 +31,8 @@ LANGUAGE_TEXT = {
         "filename": "statistical_summary_point_height_EN.png",
     },
     "PL": {
-        "distribution_title": "(a) Rozkład średniej mocy patternów",
-        "best_title": "(b) Najlepszy pattern RIS w każdym punkcie",
+        "distribution_title": "(a) Rozkład średniej mocy\npatternów",
+        "best_title": "(b) Najlepszy pattern RIS\nw każdym punkcie",
         "x_label": "Punkt odbiorczy (PT)",
         "y_label": "Moc odebrana [dBm]",
         "height_label": "H = {height:.1f} m",
@@ -109,7 +114,9 @@ def generate_statistical_summary(data, language="EN", output_dir=OUTPUT_DIR):
     pattern_statistics = calculate_pattern_statistics(data)
     best_patterns = select_best_patterns(pattern_statistics)
 
-    fig, axes = plt.subplots(1, 2, figsize=(14, 5.8), sharey=True)
+    # A narrower source canvas makes the labels remain large after the whole
+    # figure is reduced to text width in LaTeX.
+    fig, axes = plt.subplots(1, 2, figsize=(11, 5.8), sharey=True)
     offsets = {8.7: -0.19, 13.7: 0.19}
 
     for height in HEIGHTS:
@@ -147,10 +154,14 @@ def generate_statistical_summary(data, language="EN", output_dir=OUTPUT_DIR):
         )
         for height in HEIGHTS
     ]
-    axes[0].legend(handles=legend_handles, loc="upper right", fontsize=9)
-    axes[0].set_title(text["distribution_title"], fontsize=12.5)
-    axes[0].set_xlabel(text["x_label"], fontsize=11)
-    axes[0].set_ylabel(text["y_label"], fontsize=11)
+    axes[0].legend(
+        handles=legend_handles,
+        loc="upper right",
+        fontsize=LEGEND_FONTSIZE,
+    )
+    axes[0].set_title(text["distribution_title"], fontsize=TITLE_FONTSIZE)
+    axes[0].set_xlabel(text["x_label"], fontsize=AXIS_LABEL_FONTSIZE)
+    axes[0].set_ylabel(text["y_label"], fontsize=AXIS_LABEL_FONTSIZE)
 
     for height in HEIGHTS:
         height_data = best_patterns[best_patterns["height"] == height]
@@ -176,7 +187,11 @@ def generate_statistical_summary(data, language="EN", output_dir=OUTPUT_DIR):
                 vertical_alignment = "top"
             else:
                 label_y = row.mean + row.std
-                label_offset = 4
+                label_offset = (
+                    12
+                    if height == 13.7 and int(row.point) in {5, 6}
+                    else 4
+                )
                 vertical_alignment = "bottom"
 
             axes[1].annotate(
@@ -186,13 +201,13 @@ def generate_statistical_summary(data, language="EN", output_dir=OUTPUT_DIR):
                 textcoords="offset points",
                 ha="center",
                 va=vertical_alignment,
-                fontsize=7.8,
+                fontsize=ANNOTATION_FONTSIZE,
                 color=HEIGHT_COLORS[height],
             )
 
-    axes[1].set_title(text["best_title"], fontsize=12.5)
-    axes[1].set_xlabel(text["x_label"], fontsize=11)
-    axes[1].legend(loc="upper right", fontsize=9)
+    axes[1].set_title(text["best_title"], fontsize=TITLE_FONTSIZE)
+    axes[1].set_xlabel(text["x_label"], fontsize=AXIS_LABEL_FONTSIZE)
+    axes[1].legend(loc="upper right", fontsize=LEGEND_FONTSIZE)
     axes[1].tick_params(axis="y", labelleft=True)
 
     for ax in axes:
@@ -200,12 +215,12 @@ def generate_statistical_summary(data, language="EN", output_dir=OUTPUT_DIR):
         ax.set_xlim(0.5, 9.5)
         ax.set_ylim(-85, -50)
         ax.grid(True, axis="y", linestyle="--", linewidth=0.7, alpha=0.45)
-        ax.tick_params(axis="both", labelsize=9.5)
+        ax.tick_params(axis="both", labelsize=TICK_LABEL_FONTSIZE)
 
     fig.tight_layout(w_pad=2.5)
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / text["filename"]
-    fig.savefig(output_path, dpi=300, bbox_inches="tight", facecolor="white")
+    fig.savefig(output_path, dpi=600, bbox_inches="tight", facecolor="white")
     plt.close(fig)
 
     best_output_path = output_dir / "best_pattern_summary.csv"

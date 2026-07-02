@@ -22,6 +22,11 @@ ANNOTATION_FONTSIZE = 14.5
 TITLE_FONTSIZE = 15
 AXIS_LABEL_FONTSIZE = 13
 TICK_LABEL_FONTSIZE = 12
+# Larger labels for the result figures that are placed at full text width.
+# The average-power map (Fig. 1) keeps the original typography.
+RESULT_TITLE_FONTSIZE = 18
+RESULT_AXIS_LABEL_FONTSIZE = 16
+RESULT_TICK_LABEL_FONTSIZE = 14
 
 # Lista plików CSV
 file_list = [
@@ -76,6 +81,9 @@ def _draw_heatmap(
     colorbar_label="",
     figure=None,
     annotation_fontsize=ANNOTATION_FONTSIZE,
+    title_fontsize=TITLE_FONTSIZE,
+    axis_label_fontsize=AXIS_LABEL_FONTSIZE,
+    tick_label_fontsize=TICK_LABEL_FONTSIZE,
 ):
     """Draw a 3x3 heatmap using Matplotlib only."""
     image_kwargs = {"cmap": cmap, "aspect": "equal"}
@@ -93,9 +101,10 @@ def _draw_heatmap(
     ax.set_yticks(np.arange(-0.5, 3, 1), minor=True)
     ax.grid(which="minor", color="gray", linewidth=0.7)
     ax.tick_params(which="minor", bottom=False, left=False)
-    ax.set_title(title, fontsize=TITLE_FONTSIZE, pad=12)
-    ax.set_xlabel(xlabel, fontsize=AXIS_LABEL_FONTSIZE)
-    ax.set_ylabel(ylabel, fontsize=AXIS_LABEL_FONTSIZE)
+    ax.set_title(title, fontsize=title_fontsize, pad=12)
+    ax.set_xlabel(xlabel, fontsize=axis_label_fontsize)
+    ax.set_ylabel(ylabel, fontsize=axis_label_fontsize)
+    ax.tick_params(axis="both", labelsize=tick_label_fontsize)
 
     if annotations is not None:
         colormap = plt.get_cmap(cmap)
@@ -119,8 +128,8 @@ def _draw_heatmap(
     if colorbar:
         fig = figure if figure is not None else ax.figure
         bar = fig.colorbar(image, ax=ax)
-        bar.set_label(colorbar_label, fontsize=AXIS_LABEL_FONTSIZE)
-        bar.ax.tick_params(labelsize=TICK_LABEL_FONTSIZE)
+        bar.set_label(colorbar_label, fontsize=axis_label_fontsize)
+        bar.ax.tick_params(labelsize=tick_label_fontsize)
 
     return image
 
@@ -332,22 +341,19 @@ def generate_english_max_comparison(
 
         panel_label = chr(ord("a") + panel_index)
         ax.set_title(
-            f"({panel_label}) Maximum received power, H = {height} m",
-            fontsize=TITLE_FONTSIZE,
+            f"({panel_label}) Maximum received power\nH = {height} m",
+            fontsize=RESULT_TITLE_FONTSIZE,
             pad=12,
         )
-        ax.set_xlabel("PT column", fontsize=AXIS_LABEL_FONTSIZE)
-        ax.set_ylabel(
-            "PT row" if panel_index == 0 else "",
-            fontsize=AXIS_LABEL_FONTSIZE,
-        )
-        ax.tick_params(axis="both", labelsize=TICK_LABEL_FONTSIZE)
+        ax.set_xlabel("PT column", fontsize=RESULT_AXIS_LABEL_FONTSIZE)
+        ax.set_ylabel("PT row", fontsize=RESULT_AXIS_LABEL_FONTSIZE)
+        ax.tick_params(axis="both", labelsize=RESULT_TICK_LABEL_FONTSIZE)
         colorbar = fig.colorbar(image, ax=ax)
         colorbar.set_label(
             "Received power [dBm]",
-            fontsize=AXIS_LABEL_FONTSIZE,
+            fontsize=RESULT_AXIS_LABEL_FONTSIZE,
         )
-        colorbar.ax.tick_params(labelsize=TICK_LABEL_FONTSIZE)
+        colorbar.ax.tick_params(labelsize=RESULT_TICK_LABEL_FONTSIZE)
 
     output_path = os.path.join(
         output_dir,
@@ -408,22 +414,19 @@ def generate_english_average_comparison(
 
         panel_label = chr(ord("a") + panel_index)
         ax.set_title(
-            f"({panel_label}) Mean received power, H = {height} m",
-            fontsize=TITLE_FONTSIZE,
+            f"({panel_label}) Mean received power\nH = {height} m",
+            fontsize=RESULT_TITLE_FONTSIZE,
             pad=12,
         )
-        ax.set_xlabel("PT column", fontsize=AXIS_LABEL_FONTSIZE)
-        ax.set_ylabel(
-            "PT row" if panel_index == 0 else "",
-            fontsize=AXIS_LABEL_FONTSIZE,
-        )
-        ax.tick_params(axis="both", labelsize=TICK_LABEL_FONTSIZE)
+        ax.set_xlabel("PT column", fontsize=RESULT_AXIS_LABEL_FONTSIZE)
+        ax.set_ylabel("PT row", fontsize=RESULT_AXIS_LABEL_FONTSIZE)
+        ax.tick_params(axis="both", labelsize=RESULT_TICK_LABEL_FONTSIZE)
         colorbar = fig.colorbar(image, ax=ax)
         colorbar.set_label(
             "Mean received power [dBm]",
-            fontsize=AXIS_LABEL_FONTSIZE,
+            fontsize=RESULT_AXIS_LABEL_FONTSIZE,
         )
-        colorbar.ax.tick_params(labelsize=TICK_LABEL_FONTSIZE)
+        colorbar.ax.tick_params(labelsize=RESULT_TICK_LABEL_FONTSIZE)
 
     output_path = os.path.join(
         output_dir,
@@ -483,8 +486,10 @@ def generate_english_max_difference(
         colorbar_label="Power difference [dB]",
         figure=fig,
         annotation_fontsize=annotation_fontsize,
+        title_fontsize=RESULT_TITLE_FONTSIZE,
+        axis_label_fontsize=RESULT_AXIS_LABEL_FONTSIZE,
+        tick_label_fontsize=RESULT_TICK_LABEL_FONTSIZE,
     )
-    ax.tick_params(axis="both", labelsize=TICK_LABEL_FONTSIZE)
     fig.tight_layout()
 
     output_path = os.path.join(
